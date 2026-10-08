@@ -1,0 +1,2706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的成长存折 · My Growth Passbook</title>
+    <style>
+        /* ==================== 基础 ==================== */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        :root {
+            --paper: #fbfdff;
+            --ink: #2f4250;
+            --ink-soft: #7a8e9c;
+            --line: #dcecf8;
+            --blue: #4aa8e0;
+            --blue-deep: #2b7bb9;
+            --blue-dark: #1e5f92;
+            --blue-soft: #e3f2fd;
+            --blue-mid: #a8dcf7;
+            --pink: #ff9ec3;
+            --pink-soft: #ffe3ef;
+            --yellow: #ffcf5c;
+            --yellow-soft: #fff5d6;
+            --green: #7ac943;
+            --green-soft: #e2f6d8;
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Comic Sans MS", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 0%, #d6efff 0%, transparent 45%),
+                radial-gradient(circle at 88% 4%, #e6f6ff 0%, transparent 42%),
+                radial-gradient(circle at 50% 105%, #dcf5cf 0%, transparent 52%),
+                linear-gradient(180deg, #eaf7ff 0%, #f5fbff 45%, #f7fdf3 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 22px 14px 26px;
+            overflow-x: hidden;
+        }
+
+        /* ==================== 背景装饰 ==================== */
+        .decor {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden
+        }
+
+        .decor span {
+            position: absolute;
+            opacity: .75;
+            animation: float 7s ease-in-out infinite
+        }
+
+        .decor .d1 {
+            left: 4%;
+            top: 12%;
+            animation-delay: 0s;
+            font-size: 38px
+        }
+
+        .decor .d2 {
+            right: 6%;
+            top: 16%;
+            animation-delay: .9s;
+            font-size: 44px
+        }
+
+        .decor .d3 {
+            left: 8%;
+            bottom: 12%;
+            animation-delay: 1.8s;
+            font-size: 32px
+        }
+
+        .decor .d4 {
+            right: 9%;
+            bottom: 16%;
+            animation-delay: 2.6s;
+            font-size: 36px
+        }
+
+        .decor .d5 {
+            left: 46%;
+            top: 3%;
+            animation-delay: 1.3s;
+            font-size: 30px;
+            opacity: .5
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg)
+            }
+
+            50% {
+                transform: translateY(-14px) rotate(5deg)
+            }
+        }
+
+        /* ==================== 舞台 & 书本 ==================== */
+        .stage {
+            position: relative;
+            z-index: 1;
+            width: min(94vw, 1040px, 118vh);
+            aspect-ratio: 1.52/1;
+            perspective: 2700px;
+            perspective-origin: 50% 46%;
+        }
+
+        .book {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d
+        }
+
+        .backdrop {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            box-shadow: 0 18px 44px rgba(70, 130, 175, .20)
+        }
+
+        .backdrop.left {
+            left: 0;
+            border-radius: 20px 6px 6px 20px;
+            background:
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, .28) 0 12px, transparent 12px 24px),
+                linear-gradient(160deg, #7ec8f0, #4aa8e0 55%, #2b7bb9);
+        }
+
+        .backdrop.right {
+            left: 50%;
+            border-radius: 6px 20px 20px 6px;
+            background-color: var(--paper);
+            background-image: radial-gradient(circle, rgba(74, 168, 224, .13) 1px, transparent 1px);
+            background-size: 20px 20px;
+            overflow: hidden;
+        }
+
+        .spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            width: 14px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, rgba(20, 60, 90, .16), rgba(255, 255, 255, .7) 45%, rgba(20, 60, 90, .16));
+            z-index: 900;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        /* ==================== 纸张 ==================== */
+        .leaf {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform .95s cubic-bezier(.42, 0, .24, 1);
+            will-change: transform;
+        }
+
+        .leaf.flipped {
+            transform: rotateY(-180deg)
+        }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+            container-type: inline-size;
+            background-color: var(--paper);
+            background-image: radial-gradient(circle, rgba(74, 168, 224, .10) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-radius: 6px 20px 20px 6px;
+            box-shadow: 0 14px 36px rgba(70, 130, 175, .18);
+        }
+
+        .face.back {
+            transform: rotateY(180deg);
+            border-radius: 6px 20px 20px 6px
+        }
+
+        .face::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 26px;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(60, 110, 150, .14), transparent);
+            pointer-events: none;
+        }
+
+        .leaf::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .95s;
+            box-shadow: inset -30px 0 40px -20px rgba(40, 90, 130, .28);
+        }
+
+        .leaf.flipping::before {
+            opacity: 1
+        }
+
+        /* ==================== 页面通用 ==================== */
+        .pg {
+            position: absolute;
+            inset: 0;
+            padding: 6% 7% 5%;
+            display: flex;
+            flex-direction: column;
+            font-size: clamp(12px, 3.1cqw, 16.5px);
+            line-height: 1.55;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .pg.fixed {
+            overflow: hidden
+        }
+
+        .pg::-webkit-scrollbar {
+            width: 6px
+        }
+
+        .pg::-webkit-scrollbar-thumb {
+            background: var(--blue-mid);
+            border-radius: 8px
+        }
+
+        .hd {
+            display: flex;
+            align-items: center;
+            gap: .5em;
+            margin: 0 0 .7em;
+            flex-shrink: 0
+        }
+
+        .hd .dot {
+            width: 1.9em;
+            height: 1.9em;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(145deg, #6fc2ec, var(--blue-deep));
+            color: #fff;
+            font-size: .82em;
+            font-weight: 700;
+            box-shadow: 0 3px 0 rgba(30, 95, 146, .3);
+        }
+
+        .hd h2 {
+            margin: 0;
+            font-size: 1.42em;
+            line-height: 1.15;
+            color: var(--blue-deep)
+        }
+
+        .hd h2 small {
+            display: block;
+            font-size: .54em;
+            color: var(--ink-soft);
+            font-weight: 400;
+            letter-spacing: .06em;
+            margin-top: .15em
+        }
+
+        .hd .pill {
+            margin-left: auto;
+            flex: 0 0 auto;
+            font-size: .62em;
+            padding: .32em .8em;
+            border-radius: 99px;
+            background: var(--yellow-soft);
+            color: #b47d00;
+            font-weight: 700;
+            border: 1.5px dashed #ffd67a;
+            white-space: nowrap;
+        }
+
+        p {
+            margin: 0 0 .65em
+        }
+
+        .en {
+            color: var(--ink-soft);
+            font-size: .8em;
+            line-height: 1.4
+        }
+
+        .card {
+            background: #fff;
+            border: 2px dashed var(--line);
+            border-radius: 14px;
+            padding: .75em .9em;
+            margin-bottom: .6em
+        }
+
+        .card.tint-b {
+            background: var(--blue-soft);
+            border-color: #a8d8f2
+        }
+
+        .card.tint-y {
+            background: var(--yellow-soft);
+            border-color: #ffd98a
+        }
+
+        .card.tint-g {
+            background: var(--green-soft);
+            border-color: #bde5a4
+        }
+
+        .card b {
+            color: var(--blue-deep)
+        }
+
+        .rule {
+            display: flex;
+            gap: .55em;
+            margin-bottom: .5em;
+            align-items: flex-start
+        }
+
+        .rule .ic {
+            flex: 0 0 auto;
+            font-size: 1.05em;
+            line-height: 1.3
+        }
+
+        .hl {
+            background: linear-gradient(transparent 58%, #b8e4ff 58%);
+            font-weight: 700;
+            padding: 0 .1em
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: .82em
+        }
+
+        th,
+        td {
+            padding: .5em .55em;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1.5px dashed var(--line)
+        }
+
+        thead th {
+            background: var(--blue-soft);
+            color: var(--blue-deep);
+            font-size: .95em;
+            border-bottom: none
+        }
+
+        thead th:first-child {
+            border-radius: 10px 0 0 0
+        }
+
+        thead th:last-child {
+            border-radius: 0 10px 0 0
+        }
+
+        th span {
+            display: block;
+            font-weight: 400;
+            font-size: .78em;
+            color: #7aa8c8
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        /* 范例 */
+        .ex {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .5em;
+            margin-bottom: .6em
+        }
+
+        .ex .col {
+            background: #fff;
+            border-radius: 12px;
+            padding: .55em .6em;
+            border: 1.5px solid var(--line)
+        }
+
+        .ex .col h4 {
+            margin: 0 0 .3em;
+            font-size: .78em;
+            color: var(--blue-deep);
+            display: flex;
+            align-items: center;
+            gap: .3em
+        }
+
+        .ex .col p {
+            font-size: .76em;
+            margin: 0;
+            line-height: 1.45
+        }
+
+        .ex .col em {
+            display: block;
+            font-style: normal;
+            font-size: .85em;
+            color: var(--ink-soft);
+            margin-top: .22em
+        }
+
+        /* ==================== 奖励券 ==================== */
+        .coupon {
+            display: flex;
+            align-items: center;
+            gap: .6em;
+            background: #fff;
+            border: 2px dashed #a8d8f2;
+            border-radius: 14px;
+            padding: .42em .6em;
+            margin-bottom: .42em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coupon::before,
+        .coupon::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--paper);
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 2px dashed #a8d8f2;
+        }
+
+        .coupon::after {
+            left: auto;
+            right: -8px
+        }
+
+        .coupon .c-ic {
+            flex: 0 0 auto;
+            width: 2.3em;
+            height: 2.3em;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #f2faff;
+            padding: .15em;
+            border: 1.5px solid #d6ecfa;
+        }
+
+        .coupon .c-tx {
+            flex: 1;
+            min-width: 0
+        }
+
+        .coupon .c-t {
+            font-size: .86em;
+            font-weight: 700;
+            color: var(--blue-deep);
+            line-height: 1.25
+        }
+
+        .coupon .c-s {
+            font-size: .66em;
+            color: var(--ink-soft);
+            line-height: 1.35;
+            margin-top: .08em
+        }
+
+        .coupon .c-s .en {
+            font-size: 1em;
+            display: inline
+        }
+
+        .c-acts {
+            flex: 0 0 auto;
+            display: flex;
+            gap: .22em
+        }
+
+        .mini-btn {
+            border: none;
+            background: #eaf6ff;
+            color: var(--blue-deep);
+            width: 1.9em;
+            height: 1.9em;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: .78em;
+            line-height: 1;
+            display: grid;
+            place-items: center;
+            font-family: inherit;
+            transition: .16s;
+            padding: 0;
+        }
+
+        .mini-btn:hover {
+            background: #d3ecfd;
+            transform: scale(1.08)
+        }
+
+        .mini-btn.ok {
+            background: #c9ecd8;
+            color: #1f7a4d
+        }
+
+        .mini-btn.ok:hover {
+            background: #b0e3c5
+        }
+
+        .c-input {
+            display: block;
+            width: 100%;
+            font-family: inherit;
+            font-size: .84em;
+            border: 1.5px solid #bfe0f5;
+            border-radius: 8px;
+            background: #f7fcff;
+            padding: .24em .5em;
+            margin-bottom: .25em;
+            outline: none;
+            color: var(--ink);
+        }
+
+        .c-input:focus {
+            border-color: var(--blue);
+            background: #fff
+        }
+
+        .c-input-sm {
+            font-size: .72em
+        }
+
+        .add-btn {
+            font-family: inherit;
+            font-size: .78em;
+            font-weight: 700;
+            color: #fff;
+            border: none;
+            border-radius: 99px;
+            padding: .58em 1.25em;
+            cursor: pointer;
+            background: linear-gradient(150deg, #6fc2ec, var(--blue-deep));
+            box-shadow: 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
+            transition: transform .14s, box-shadow .14s;
+            display: inline-flex;
+            align-items: center;
+            gap: .4em;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #1e5f92, 0 8px 18px rgba(43, 123, 185, .32)
+        }
+
+        .add-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #1e5f92
+        }
+
+        .add-btn.small {
+            margin-top: .35em;
+            font-size: .72em;
+            padding: .5em 1.05em
+        }
+
+        /* ==================== 第二部分 ==================== */
+        .part-band {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: .6em;
+            background: linear-gradient(120deg, #6fc2ec, var(--blue-deep));
+            color: #fff;
+            border-radius: 14px;
+            padding: .5em .9em;
+            margin-bottom: .6em;
+            box-shadow: 0 6px 16px rgba(43, 123, 185, .28);
+        }
+
+        .part-band .num {
+            font-size: .82em;
+            font-weight: 700;
+            background: rgba(255, 255, 255, .22);
+            border-radius: 99px;
+            padding: .2em .8em;
+            white-space: nowrap
+        }
+
+        .part-band .en2 {
+            font-size: .64em;
+            letter-spacing: .16em;
+            opacity: .9
+        }
+
+        .big-title {
+            margin: 0 0 .2em;
+            font-size: 1.68em;
+            line-height: 1.15;
+            color: var(--blue-deep);
+            letter-spacing: .02em
+        }
+
+        .big-title small {
+            display: block;
+            font-size: .42em;
+            color: var(--ink-soft);
+            letter-spacing: .12em;
+            font-weight: 400;
+            margin-top: .28em
+        }
+
+        .rec-wrap {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 12px;
+            border: 2px solid #bfe0f5;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .rec-wrap::-webkit-scrollbar {
+            width: 9px
+        }
+
+        .rec-wrap::-webkit-scrollbar-track {
+            background: #eef7fe;
+            border-radius: 9px
+        }
+
+        .rec-wrap::-webkit-scrollbar-thumb {
+            background: #8fc9ec;
+            border-radius: 9px;
+            border: 2px solid #eef7fe
+        }
+
+        .rec-wrap::-webkit-scrollbar-thumb:hover {
+            background: var(--blue)
+        }
+
+        .rec {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .72em;
+            table-layout: fixed
+        }
+
+        .rec thead th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: #d9eefc;
+            color: var(--blue-dark);
+            padding: .45em .3em;
+            border: 1.5px solid #bfe0f5;
+            font-weight: 700;
+            line-height: 1.25;
+            text-align: center;
+            box-shadow: 0 2px 0 #bfe0f5;
+        }
+
+        .rec th:nth-child(1) {
+            width: 8%
+        }
+
+        .rec th:nth-child(5) {
+            width: 10%
+        }
+
+        .rec td {
+            border: 1.5px solid #cfe7f7;
+            padding: 0;
+            background: #fff;
+            vertical-align: top;
+            position: relative
+        }
+
+        .rec td.idx {
+            text-align: center;
+            background: #eaf6ff;
+            color: var(--blue-deep);
+            font-weight: 700;
+            font-size: 1.05em;
+            padding-top: .7em
+        }
+
+        .rec td.box {
+            text-align: center;
+            vertical-align: middle
+        }
+
+        .rec textarea {
+            width: 100%;
+            display: block;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1em;
+            color: var(--ink);
+            resize: none;
+            outline: none;
+            padding: .5em .45em;
+            line-height: 1.4;
+            min-height: 3.1em;
+            overflow: hidden;
+        }
+
+        .rec textarea::placeholder {
+            color: #b9cbd8
+        }
+
+        .rec textarea:focus {
+            background: #f2faff
+        }
+
+        .tick {
+            width: 2em;
+            height: 2em;
+            border-radius: 8px;
+            border: 2.5px solid #b8d8ee;
+            background: #fff;
+            display: inline-grid;
+            place-items: center;
+            cursor: pointer;
+            font-size: .72em;
+            font-weight: 700;
+            color: transparent;
+            transition: .18s;
+            font-family: inherit;
+        }
+
+        .tick:hover {
+            border-color: var(--blue)
+        }
+
+        .tick.on {
+            background: linear-gradient(145deg, #6fc2ec, var(--blue-deep));
+            border-color: var(--blue-deep);
+            color: #fff;
+            transform: scale(1.06);
+            box-shadow: 0 3px 8px rgba(43, 123, 185, .35);
+        }
+
+        .row-del {
+            border: none;
+            background: transparent;
+            color: #c8d9e5;
+            cursor: pointer;
+            font-size: 1.1em;
+            line-height: 1;
+            padding: .1em .3em;
+            font-family: inherit;
+            position: absolute;
+            right: 2px;
+            top: 2px;
+        }
+
+        .row-del:hover {
+            color: #e2618b
+        }
+
+        /* 底部：进度条 + 分页器 */
+        .rec-bottom {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: .8em;
+            flex-wrap: wrap;
+            margin-top: .55em;
+        }
+
+        .rec-bottom .progress-bar {
+            flex: 1 1 11em;
+            min-width: 0;
+            margin: 0;
+            font-size: .72em;
+            color: var(--ink-soft);
+            display: flex;
+            align-items: center;
+            gap: .55em;
+        }
+
+        .bar {
+            flex: 1;
+            height: .72em;
+            border-radius: 99px;
+            background: #e4eff7;
+            overflow: hidden
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #6fc2ec, var(--blue-deep));
+            transition: width .4s
+        }
+
+        /* 分页器 */
+        .pager {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .45em;
+            flex-shrink: 0;
+        }
+
+        .pager button {
+            font-family: inherit;
+            font-size: .68em;
+            font-weight: 700;
+            border: 1.5px solid #bfe0f5;
+            background: #fff;
+            color: var(--blue-deep);
+            border-radius: 99px;
+            padding: .3em .8em;
+            cursor: pointer;
+            transition: .15s;
+            line-height: 1.2;
+        }
+
+        .pager button:hover:not(:disabled) {
+            background: var(--blue-soft);
+            border-color: var(--blue-mid)
+        }
+
+        .pager button:disabled {
+            opacity: .3;
+            cursor: not-allowed
+        }
+
+        .pager .page-info {
+            font-size: .68em;
+            color: var(--ink-soft);
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 0 .15em;
+        }
+
+        /* ==================== 兑换记录 ==================== */
+        .redeem-list {
+            display: flex;
+            flex-direction: column;
+            gap: .55em
+        }
+
+        .redeem-card {
+            background: #fff;
+            border: 2px dashed #a8d8f2;
+            border-radius: 14px;
+            padding: .6em .7em;
+            position: relative
+        }
+
+        .rc-head {
+            display: flex;
+            align-items: center;
+            gap: .45em;
+            font-size: .76em;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: .5em
+        }
+
+        .rc-head .rc-num {
+            background: var(--blue-soft);
+            border-radius: 99px;
+            padding: .16em .7em
+        }
+
+        .rc-del {
+            margin-left: auto;
+            border: none;
+            background: transparent;
+            color: #c8d9e5;
+            cursor: pointer;
+            font-size: 1.15em;
+            line-height: 1;
+            font-family: inherit;
+            padding: 0 .25em
+        }
+
+        .rc-del:hover {
+            color: #e2618b
+        }
+
+        .rc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .42em .7em
+        }
+
+        .rc-grid label {
+            display: flex;
+            align-items: center;
+            gap: .4em;
+            font-size: .72em;
+            color: var(--ink-soft);
+            min-width: 0
+        }
+
+        .rc-grid label span {
+            white-space: nowrap
+        }
+
+        .rc-grid input,
+        .rc-grid select {
+            flex: 1;
+            min-width: 0;
+            font-family: inherit;
+            font-size: 1em;
+            color: var(--ink);
+            border: none;
+            border-bottom: 1.6px dotted #b8d8ee;
+            background: transparent;
+            padding: .2em .15em;
+            outline: none;
+        }
+
+        .rc-grid input:focus,
+        .rc-grid select:focus {
+            background: #f2faff;
+            border-bottom-color: var(--blue)
+        }
+
+        .rc-grid select {
+            cursor: pointer;
+            appearance: none;
+            background-image: none
+        }
+
+        /* ==================== 封面 ==================== */
+        .cover {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            font-size: clamp(12px, 3.1cqw, 16.5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5% 7%;
+            background: linear-gradient(170deg, #bfe6fb, #e6f6ff 60%, #eafbf0);
+        }
+
+        .cover-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            z-index: 0;
+        }
+
+        .cover-photo.is-fallback {
+            display: none
+        }
+
+        .cover-fallback {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 50% 30%, #ffffff 0%, transparent 55%),
+                linear-gradient(180deg, #bfe6fb 0%, #d8f0ff 45%, #b7e39a 46%, #8fd45a 100%);
+        }
+
+        .cover-veil {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg,
+                    rgba(255, 255, 255, .58) 0%,
+                    rgba(255, 255, 255, .34) 40%,
+                    rgba(255, 255, 255, .55) 70%,
+                    rgba(226, 246, 255, .82) 100%);
+        }
+
+        .cover-inner {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            padding: 5% 6.5%;
+            box-shadow: 0 10px 30px rgba(43, 123, 185, .16);
+            border: 2px solid rgba(255, 255, 255, .9);
+            max-width: 86%;
+        }
+
+        .pig-wrap {
+            position: relative;
+            width: 6em;
+            height: 6em;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background .2s, box-shadow .2s, transform .2s;
+            outline: none;
+        }
+
+        .pig-wrap:hover,
+        .pig-wrap:focus-visible {
+            background: rgba(232, 246, 255, .85);
+            box-shadow: 0 0 0 2px #a8d8f2, 0 6px 16px rgba(43, 123, 185, .18);
+            transform: translateY(-2px);
+        }
+
+        .pig-wrap.is-empty {
+            background: repeating-linear-gradient(45deg, #f2faff 0 10px, #e8f5ff 10px 20px);
+            border: 2px dashed #a8d8f2;
+        }
+
+        .pig-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 6px 10px rgba(43, 123, 185, .18));
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+
+        .pig-img.is-hidden {
+            opacity: 0
+        }
+
+        .pig-empty-hint {
+            position: absolute;
+            inset: 0;
+            display: none;
+            place-items: center;
+            font-size: .62em;
+            font-weight: 700;
+            color: #5f93b8;
+            text-align: center;
+            line-height: 1.25;
+            padding: .4em;
+            pointer-events: none;
+        }
+
+        .pig-wrap.is-empty .pig-empty-hint {
+            display: grid
+        }
+
+        .pig-badge {
+            position: absolute;
+            right: -6px;
+            bottom: -6px;
+            width: 1.9em;
+            height: 1.9em;
+            border-radius: 50%;
+            background: #fff;
+            border: 1.5px solid #a8d8f2;
+            display: grid;
+            place-items: center;
+            font-size: .5em;
+            box-shadow: 0 3px 8px rgba(43, 123, 185, .28);
+            transition: transform .18s, opacity .18s;
+            pointer-events: none;
+        }
+
+        .pig-wrap:hover .pig-badge {
+            transform: scale(1.12)
+        }
+
+        .cover h1 {
+            margin: .28em 0 .05em;
+            font-size: 2.02em;
+            line-height: 1.12;
+            letter-spacing: .03em;
+            color: var(--blue-deep);
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(168, 220, 247, .7);
+        }
+
+        .cover .en-title {
+            font-size: .74em;
+            letter-spacing: .3em;
+            color: #5f93b8;
+            font-weight: 700;
+            margin-bottom: .6em
+        }
+
+        .cover .divider {
+            width: 60%;
+            height: 3px;
+            border-radius: 9px;
+            margin: .1em 0 .7em;
+            background: repeating-linear-gradient(90deg, var(--blue) 0 10px, transparent 10px 18px);
+            opacity: .6;
+        }
+
+        .cover .motto {
+            font-size: .92em;
+            font-weight: 700;
+            color: #3f6b88;
+            margin-bottom: .1em
+        }
+
+        .cover .motto-en {
+            font-size: .66em;
+            color: var(--ink-soft);
+            line-height: 1.5;
+            margin-bottom: .35em
+        }
+
+        .cover .fields {
+            display: flex;
+            gap: 1.6em;
+            font-size: .76em;
+            color: #6f93a8;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.15em;
+        }
+
+        .cover .field-item {
+            display: flex;
+            align-items: flex-end;
+            gap: .55em;
+        }
+
+        .cover .field-label {
+            white-space: nowrap;
+            line-height: 1.5;
+            padding-bottom: .18em;
+        }
+
+        .cover .field-input {
+            font-family: inherit;
+            font-size: 1em;
+            color: var(--blue-deep);
+            background: transparent;
+            border: none;
+            border-bottom: 2px dotted #a8cee4;
+            padding: 0 .25em .42em;
+            width: 6em;
+            outline: none;
+            text-align: center;
+            transition: border-color .18s, background .18s;
+            border-radius: 0;
+        }
+
+        .cover .field-input:focus {
+            border-bottom-color: var(--blue);
+            background: rgba(255, 255, 255, .65);
+        }
+
+        .cover .field-input::placeholder {
+            color: #c3d9e8;
+            font-size: .9em;
+        }
+
+        /* ==================== 封底 ==================== */
+        .end-page {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8% 10%;
+            gap: .35em;
+            font-size: clamp(12px, 3.1cqw, 16.5px);
+            color: var(--ink-soft);
+        }
+
+        .end-title {
+            margin: 0;
+            font-size: 2em;
+            line-height: 1.15;
+            color: var(--blue-deep);
+            letter-spacing: .04em;
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(168, 220, 247, .6);
+        }
+
+        .end-sub {
+            font-size: .68em;
+            letter-spacing: .4em;
+            color: #5f93b8;
+            font-weight: 700;
+            margin-top: .15em;
+        }
+
+        .end-divider {
+            width: 55%;
+            height: 3px;
+            border-radius: 9px;
+            margin: .9em 0;
+            background: repeating-linear-gradient(90deg, var(--blue) 0 10px, transparent 10px 18px);
+            opacity: .55;
+        }
+
+        .end-line {
+            font-size: .98em;
+            font-weight: 700;
+            color: #3f6b88;
+            margin: .1em 0;
+            line-height: 1.5;
+        }
+
+        .end-line-en {
+            font-size: .72em;
+            color: var(--ink-soft);
+            margin: .15em 0 .9em;
+            line-height: 1.5;
+        }
+
+        .end-badges {
+            display: flex;
+            gap: .55em;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: .2em 0 .9em;
+        }
+
+        .end-badges .badge {
+            font-size: .72em;
+            font-weight: 700;
+            color: var(--blue-deep);
+            background: var(--blue-soft);
+            border: 1.5px dashed #a8d8f2;
+            border-radius: 99px;
+            padding: .32em .9em;
+            white-space: nowrap;
+        }
+
+        .end-thanks {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #e2618b;
+            margin: .1em 0 0;
+        }
+
+        /* ==================== 控制条 ==================== */
+        .controls {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 15px
+        }
+
+        .btn {
+            font-family: inherit;
+            font-size: .92em;
+            font-weight: 700;
+            color: #fff;
+            border: none;
+            border-radius: 99px;
+            padding: .62em 1.35em;
+            cursor: pointer;
+            background: linear-gradient(150deg, #6fc2ec, var(--blue-deep));
+            box-shadow: 0 4px 0 #1e5f92, 0 8px 18px rgba(43, 123, 185, .28);
+            transition: transform .14s, box-shadow .14s, opacity .2s;
+            display: flex;
+            align-items: center;
+            gap: .4em;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e5f92, 0 10px 22px rgba(43, 123, 185, .32)
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #1e5f92
+        }
+
+        .btn:disabled {
+            opacity: .34;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 0 #1e5f92
+        }
+
+        .counter {
+            min-width: 74px;
+            text-align: center;
+            font-size: .82em;
+            font-weight: 700;
+            color: var(--blue-deep);
+            background: #fff;
+            border-radius: 99px;
+            padding: .5em .9em;
+            box-shadow: 0 3px 10px rgba(90, 150, 190, .18);
+            border: 1.5px solid #cfe7f7;
+        }
+
+        .hint {
+            position: relative;
+            z-index: 2;
+            font-size: 12px;
+            color: #94aebd;
+            text-align: center
+        }
+
+        /* ==================== 响应式 ==================== */
+        @media (max-width:760px) {
+            body {
+                padding: 22px 10px 16px;
+                gap: 12px;
+                justify-content: flex-start
+            }
+
+            .stage {
+                width: 94vw;
+                aspect-ratio: .74/1;
+                max-height: 74vh;
+                perspective: 1800px;
+                perspective-origin: 40% 50%
+            }
+
+            .backdrop.left {
+                display: none
+            }
+
+            .backdrop.right {
+                left: 0;
+                width: 100%;
+                border-radius: 16px
+            }
+
+            .leaf {
+                left: 0;
+                width: 100%
+            }
+
+            .face,
+            .face.back {
+                border-radius: 16px
+            }
+
+            .spine {
+                display: none
+            }
+
+            .pg {
+                font-size: clamp(13px, 4.2cqw, 16px);
+                padding: 6.5% 6% 5%
+            }
+
+            .cover {
+                font-size: clamp(13px, 4.2cqw, 16px)
+            }
+
+            .ex {
+                grid-template-columns: 1fr;
+                gap: .4em
+            }
+
+            .rc-grid {
+                grid-template-columns: 1fr
+            }
+
+            .btn {
+                padding: .55em 1.05em;
+                font-size: .85em
+            }
+
+            .counter {
+                min-width: 60px;
+                font-size: .75em;
+                padding: .45em .7em
+            }
+
+            .cover-inner {
+                max-width: 94%;
+                padding: 6% 5.5%
+            }
+
+            .pig-wrap {
+                width: 4.8em;
+                height: 4.8em
+            }
+
+            .cover h1 {
+                font-size: 1.55em
+            }
+
+            .cover .fields {
+                gap: 1.2em;
+                font-size: .72em
+            }
+
+            .cover .field-input {
+                width: 5.2em
+            }
+
+            .rec-bottom {
+                gap: .5em
+            }
+
+            .rec-bottom .progress-bar {
+                flex: 1 1 100%
+            }
+
+            .end-title {
+                font-size: 1.6em
+            }
+
+            .end-line {
+                font-size: .9em
+            }
+
+            .end-thanks {
+                font-size: .95em
+            }
+        }
+
+        @media (max-width:420px) {
+            .hd h2 {
+                font-size: 1.22em
+            }
+
+            .coupon {
+                padding: .36em .5em
+            }
+
+            .coupon .c-ic {
+                width: 2em;
+                height: 2em
+            }
+
+            .rec {
+                font-size: .66em
+            }
+
+            .rec textarea {
+                min-height: 2.8em
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="decor" aria-hidden="true">
+        <span class="d1">☁️</span>
+        <span class="d2">☁️</span>
+        <span class="d3">🌼</span>
+        <span class="d4">🌷</span>
+        <span class="d5">🦋</span>
+    </div>
+
+    <div class="stage">
+        <div class="book" id="book">
+
+            <!-- 左侧底层 -->
+            <div class="backdrop left" aria-hidden="true"></div>
+
+            <!-- 右侧底层：存折封底 -->
+            <div class="backdrop right">
+                <div class="end-page">
+                    <h2 class="end-title">存折封底</h2>
+                    <div class="end-sub">THE END</div>
+                    <div class="end-divider"></div>
+
+                    <p class="end-line">每一次尝试，都是成长的开始。</p>
+                    <p class="end-line-en">Every attempt is the beginning of growth.</p>
+
+                    <div class="end-badges">
+                        <span class="badge">🌱 诚实</span>
+                        <span class="badge">💙 反思</span>
+                        <span class="badge">⭐ 进步</span>
+                    </div>
+
+                    <p class="end-thanks">你已经很勇敢了！</p>
+                </div>
+            </div>
+
+            <!-- ==================== 第 0 张纸 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="cover">
+                        <div class="cover-fallback" aria-hidden="true"></div>
+                        <img class="cover-photo" src="2.jpg" alt="" onerror="this.classList.add('is-fallback')">
+                        <div class="cover-veil"></div>
+
+                        <div class="cover-inner">
+                            <div class="pig-wrap" id="pigWrap" role="button" tabindex="0"
+                                title="点击更换图片 / Click to change">
+                                <img class="pig-img" id="pigImg" src="3.jpg" alt="佩奇">
+                                <div class="pig-empty-hint">点击这里<br>选一张图</div>
+                                <span class="pig-badge" aria-hidden="true">🖼️</span>
+                            </div>
+
+                            <h1>我的成长存折</h1>
+                            <div class="en-title">MY GROWTH PASSBOOK</div>
+                            <div class="divider"></div>
+                            <p class="motto">犯错是学习的好机会，每次反思都在长大。</p>
+                            <p class="motto-en">Mistakes are learning opportunities.<br>Every reflection helps us grow.
+                            </p>
+
+                            <div class="fields">
+                                <label class="field-item">
+                                    <span class="field-label">小主人</span>
+                                    <input class="field-input" type="text" placeholder="写名字…" autocomplete="off">
+                                </label>
+                                <label class="field-item">
+                                    <span class="field-label">开户日期</span>
+                                    <input class="field-input" type="text" placeholder="年 / 月 / 日" autocomplete="off">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 玩法指南 -->
+                <div class="face back">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">1</span>
+                            <h2>第一部分 · 玩法指南<small>Part 1 · How to Use</small></h2>
+                        </div>
+
+                        <div class="card tint-y">
+                            <p style="margin:0;font-size:.88em">
+                                开始记录之前，先和爸爸妈妈一起把这一部分读一遍——
+                                知道规则、看过范例、约定好公约，再去挑一张喜欢的奖励券，
+                                作为自己努力的目标。
+                            </p>
+                            <p class="en" style="margin:.5em 0 0">
+                                Before you start, read this part together with Mom and Dad.
+                                Know the rules, look at the examples, agree on the family promise,
+                                then pick a reward coupon you'd like to work for.
+                            </p>
+                        </div>
+
+                        <div class="rule"><span class="ic">①</span>
+                            <div><b>玩法规则</b>
+                                <div class="en">Rules of the Game</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">②</span>
+                            <div><b>填写范例</b>
+                                <div class="en">Example Entries</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">③</span>
+                            <div><b>家庭公约</b>
+                                <div class="en">Our Family Promise</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">④</span>
+                            <div><b>全套奖励券</b>
+                                <div class="en">Reward Coupons</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:auto;text-align:center;font-size:2.4em;opacity:.55">🐷💙</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 第 1 张纸 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">2</span>
+                            <h2>玩法规则<small>Rules of the Game</small></h2>
+                        </div>
+
+                        <div class="card tint-b">
+                            <p style="margin:0;font-size:.86em">
+                                这本存折不是用来“记账挨批评”的，而是帮我们把犯错变成一次成长。
+                                每认真反思一次，就给自己存下一笔“成长存款”。
+                            </p>
+                            <p class="en" style="margin:.4em 0 0">
+                                This passbook is not for keeping score to blame you.
+                                It turns every mistake into a chance to grow.
+                            </p>
+                        </div>
+
+                        <div class="card tint-y" style="text-align:center">
+                            <b style="font-size:.95em">核心规则</b><br>
+                            <span style="font-size:.86em">认真完成 1 条反思 ＝ 存入 1 笔成长存款</span>
+                            <div class="en" style="margin-top:.3em">1 honest reflection = 1 growth deposit</div>
+                        </div>
+
+                        <div class="rule"><span class="ic">✏️</span>
+                            <div>
+                                <b>怎么写：</b>把“我做了什么 → 发生了什么 → 我学到了什么”三格都写清楚，才算一条有效反思。
+                                <div class="en">Write all three boxes clearly: what I did → what happened → what I
+                                    learned.</div>
+                            </div>
+                        </div>
+
+                        <div class="rule"><span class="ic">✅</span>
+                            <div>
+                                <b>怎么存：</b>写完后，在最后一格“存入”打勾，表示这笔存款已经入账。
+                                <div class="en">Then tick the “Deposit” box — that money is in the bank!</div>
+                            </div>
+                        </div>
+
+                        <div class="rule"><span class="ic">🎁</span>
+                            <div>
+                                <b>怎么换：</b>攒满 5 笔存款，可以自选 1 张奖励券。
+                                <div class="en">Save up 5 deposits and pick 1 reward coupon.</div>
+                            </div>
+                        </div>
+
+                        <div class="card tint-g">
+                            <p style="margin:0;font-size:.82em">
+                                <b>重复犯一模一样的错误，不计入存款。</b>
+                                同一个错误第二次出现，说明上次还没真正学会——先改正，再重新记录新出现的问题。
+                            </p>
+                            <p class="en" style="margin:.4em 0 0">
+                                Repeating the exact same mistake does not count. Fix it first, then record something
+                                new.
+                            </p>
+                        </div>
+
+                        <p class="en" style="font-size:.76em;margin-top:.3em">
+                            💡 情绪激动的时候先不写；等心情平复了再来记录。写的时候只写事实，不写“我太笨了”“我是坏孩子”这样的标签。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">3</span>
+                            <h2>三栏怎么写？<small>The Three Columns</small></h2>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>栏目<span>Column</span></th>
+                                    <th>写什么<span>What to write</span></th>
+                                    <th>不要这样写<span>Don't write</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><b>我做了什么</b>
+                                        <div class="en">What I did</div>
+                                    </td>
+                                    <td>客观描述自己做的事，像摄像机拍到的一样<div class="en">Describe it like a camera saw it</div>
+                                    </td>
+                                    <td>“我很作”“我特别不听话”——这是贴标签<div class="en">That's a label, not a fact</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>发生了什么</b>
+                                        <div class="en">What happened</div>
+                                    </td>
+                                    <td>这件事带来了什么结果，对自己和别人有什么影响<div class="en">The result, and how it affected others
+                                        </div>
+                                    </td>
+                                    <td>“反正都怪我”——这不是结果，是自责<div class="en">That's self-blame, not a result</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>我学到了什么</b>
+                                        <div class="en">What I learned</div>
+                                    </td>
+                                    <td>下次遇到同样的情况，我打算怎么做<div class="en">What I will do next time</div>
+                                    </td>
+                                    <td>“下次不敢了”——太笼统，要做到才知道怎么做<div class="en">Too vague — be specific</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="card tint-b" style="margin-top:.85em">
+                            <p style="margin:0;font-size:.82em">
+                                <b>不会写字的小朋友：</b>可以口述给爸爸妈妈，请他们帮忙记录，
+                                但内容一定要是你自己想说、自己想到的，不是大人替你编的。
+                            </p>
+                            <p class="en" style="margin:.4em 0 0">
+                                Too little to write? Tell Mom or Dad and they'll write it down —
+                                but the words must be <b>yours</b>.
+                            </p>
+                        </div>
+
+                        <div style="margin-top:auto;text-align:center;font-size:2em;opacity:.5">📝✨</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 第 2 张纸 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">4</span>
+                            <h2>换领规则<small>Redemption Rules</small></h2>
+                        </div>
+
+                        <div class="rule"><span class="ic">🎟️</span>
+                            <div>
+                                换领 <b class="hl">5 个勾（✓）</b>，可以自选一张奖励券。
+                                <div class="en">5 ticks (✓) = choose 1 reward coupon.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">1️⃣</span>
+                            <div>
+                                一次只能换一张，不能多张叠加兑换。
+                                <div class="en">Only one coupon at a time — no stacking.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">♻️</span>
+                            <div>
+                                兑换完成后，卡片回收作废，存折上的存款也会重新开始计算。
+                                <div class="en">After redeeming, the coupon is collected and your deposit count resets.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">⏰</span>
+                            <div>
+                                所有奖励券，使用前都要和家长提前商量好时间，不能临时突然要求兑现。
+                                <div class="en">Agree on a time with Mom or Dad in advance — no sudden demands.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">✍️</span>
+                            <div>
+                                兑换记录请写在“兑换记录”栏，并由孩子和家长共同签名。
+                                <div class="en">Write it in the Redemption Record and sign together.</div>
+                            </div>
+                        </div>
+
+                        <div class="card tint-y" style="margin-top:.5em">
+                            <div style="font-size:.8em;text-align:center">
+                                🐷 <b>小提醒</b>：奖励券是努力换来的小惊喜，<br>不是讨价还价的筹码哦！
+                                <div class="en" style="margin-top:.35em">Coupons are earned surprises, not bargaining
+                                    chips!</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:auto;text-align:center;font-size:2.1em;opacity:.5">🎁🎈</div>
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">5</span>
+                            <h2>填写范例<small>Example Entries</small></h2>
+                        </div>
+                        <p class="en" style="margin-bottom:.75em;font-size:.76em">
+                            下面是三个小朋友写得不错的例子，可以照着这样的方式，用自己的话写出来。<br>
+                            Three nice examples — try writing yours in your own words.
+                        </p>
+
+                        <div class="ex">
+                            <div class="col">
+                                <h4>1️⃣ 🍚</h4>
+                                <p><b>我做了什么</b><br>吃饭的时候一直摆弄勺子，慢吞吞不吃饭。<em>I played with my spoon instead of eating.</em>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <h4>2️⃣ 📖</h4>
+                                <p><b>我做了什么</b><br>看书的时候把书页用力撕扯。<em>I tore the pages of my book.</em></p>
+                            </div>
+                            <div class="col">
+                                <h4>3️⃣ 🧸</h4>
+                                <p><b>我做了什么</b><br>和小朋友玩耍时抢玩具，大声吼叫。<em>I grabbed a toy and yelled at my friend.</em></p>
+                            </div>
+                        </div>
+
+                        <div class="ex">
+                            <div class="col" style="background:var(--yellow-soft);border-color:#ffd98a">
+                                <h4>发生了什么</h4>
+                                <p>饭菜凉了，饭后没有时间看绘本。<em>The food went cold and there was no story time.</em></p>
+                            </div>
+                            <div class="col" style="background:var(--yellow-soft);border-color:#ffd98a">
+                                <h4>发生了什么</h4>
+                                <p>书破掉了，没办法完整阅读。<em>The book was torn and hard to read.</em></p>
+                            </div>
+                            <div class="col" style="background:var(--yellow-soft);border-color:#ffd98a">
+                                <h4>发生了什么</h4>
+                                <p>小伙伴不开心，不愿意继续一起玩。<em>My friend was sad and didn't want to play.</em></p>
+                            </div>
+                        </div>
+
+                        <div class="ex" style="margin-bottom:0">
+                            <div class="col" style="background:var(--green-soft);border-color:#bde5a4">
+                                <h4>我学到了什么</h4>
+                                <p>专心吃饭，吃完再玩。<em>Focus on eating, then play.</em></p>
+                            </div>
+                            <div class="col" style="background:var(--green-soft);border-color:#bde5a4">
+                                <h4>我学到了什么</h4>
+                                <p>翻书要轻轻的，爱护书本。<em>Turn pages gently.</em></p>
+                            </div>
+                            <div class="col" style="background:var(--green-soft);border-color:#bde5a4">
+                                <h4>我学到了什么</h4>
+                                <p>想要玩具可以好好商量，不能大喊大叫。<em>Use words, not shouting.</em></p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:auto;text-align:center;font-size:1.9em;opacity:.5">🌟</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 第 3 张纸 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">6</span>
+                            <h2>我们的家庭公约<small>Our Family Promise</small></h2>
+                            <span class="pill">全家一起</span>
+                        </div>
+
+                        <div class="rule"><span class="ic">👨‍👩‍👧</span>
+                            <div>
+                                这本存折是全家人一起用的。爸爸妈妈也会犯错，也会写进来。
+                                <div class="en">This passbook is for the whole family — parents write in it too.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">😌</span>
+                            <div>
+                                情绪平复之后再来记录，正在生气时不写存折。
+                                <div class="en">Write when calm, never while angry.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">🔍</span>
+                            <div>
+                                只描述事实，不写负面标签，不指责。
+                                <div class="en">Facts only — no labels, no blaming.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">🗣️</span>
+                            <div>
+                                低龄孩子可以口述，家长帮忙记录，内容必须是孩子自己表达的想法。
+                                <div class="en">Little ones may dictate; the words must be their own.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">🔁</span>
+                            <div>
+                                同一类错误反复出现，不算有效存款；改正之后，新的问题才可以记录。
+                                <div class="en">Repeated mistakes don't count; fix it, then record something new.</div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">🎫</span>
+                            <div>
+                                攒够 5 条只能兑换一张奖励券，不能多张叠加；兑换完成，卡片回收作废。
+                                <div class="en">5 deposits = 1 coupon. No stacking. Coupons are collected after use.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rule"><span class="ic">📅</span>
+                            <div>
+                                所有奖励券，使用前都需要和家长提前商量时间，不能临时突然要求兑现。
+                                <div class="en">Plan the time together in advance.</div>
+                            </div>
+                        </div>
+
+                        <div class="card tint-b" style="margin-top:auto">
+                            <div style="font-size:.82em">
+                                <b>我们一起约定 · Our Promise</b>
+                                <div style="display:flex;flex-wrap:wrap;gap:.7em 1.4em;margin-top:.7em">
+                                    <span>孩子签名 <span
+                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
+                                    <span>爸爸签名 <span
+                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
+                                    <span>妈妈签名 <span
+                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
+                                    <span>约定日期 <span
+                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">7</span>
+                            <h2>奖励券 ①<small>Reward Coupons · 1</small></h2>
+                            <span class="pill">攒满 5 笔换 1 张</span>
+                        </div>
+
+                        <div id="list-c1"></div>
+                        <button class="add-btn small" data-add="c1">＋ 新增奖励券 · Add coupon</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 第 4 张纸 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">8</span>
+                            <h2>奖励券 ②<small>Reward Coupons · 2</small></h2>
+                        </div>
+
+                        <div id="list-c2"></div>
+                        <button class="add-btn small" data-add="c2">＋ 新增奖励券 · Add coupon</button>
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <div class="pg">
+                        <div class="hd">
+                            <span class="dot">9</span>
+                            <h2>奖励券 ③<small>Reward Coupons · 3</small></h2>
+                        </div>
+
+                        <div id="list-c3"></div>
+                        <button class="add-btn small" data-add="c3">＋ 新增奖励券 · Add coupon</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 第 5 张纸：核心记录 ==================== -->
+            <div class="leaf">
+                <div class="face front">
+                    <div class="pg fixed" style="padding-bottom:4%">
+                        <div class="part-band">
+                            <span class="num">第二部分 · 记录</span>
+                            <span class="en2">PART TWO · RECORD</span>
+                        </div>
+
+                        <h2 class="big-title">
+                            成长存款 · 我的记录
+                            <small>MY GROWTH DEPOSITS</small>
+                        </h2>
+                        <p class="en" style="font-size:.72em;margin:.3em 0 .6em">
+                            这里是最重要的地方。每一次认真反思，都会变成一笔实实在在的存款。写得越诚实，存款就越有价值。
+                        </p>
+
+                        <div class="rec-wrap">
+                            <table class="rec">
+                                <thead>
+                                    <tr>
+                                        <th>序号<br><span style="font-size:.85em">No.</span></th>
+                                        <th>我做了什么<br><span style="font-size:.85em">What I did</span></th>
+                                        <th>发生了什么<br><span style="font-size:.85em">What happened</span></th>
+                                        <th>我学到了什么<br><span style="font-size:.85em">What I learned</span></th>
+                                        <th>存入<br><span style="font-size:.85em">✓</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recBody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="rec-bottom">
+                            <div class="progress-bar">
+                                <span style="white-space:nowrap">存款进度<br><span
+                                        style="font-size:.85em">Progress</span></span>
+                                <div class="bar"><i id="barFill"></i></div>
+                                <span id="barText" style="font-weight:700;color:var(--blue-deep);white-space:nowrap">0 /
+                                    5</span>
+                            </div>
+                            <div class="pager">
+                                <button id="recPrev" type="button" title="上一页 / Prev">◀</button>
+                                <span class="page-info" id="recPageInfo">第 1 / 1 页</span>
+                                <button id="recNext" type="button" title="下一页 / Next">▶</button>
+                            </div>
+                        </div>
+
+                        <button class="add-btn" id="addRecBtn" style="margin-top:.5em">＋ 新增一笔存款 · Add a deposit</button>
+                    </div>
+                </div>
+
+                <div class="face back">
+                    <div class="pg">
+                        <div class="part-band">
+                            <span class="num">第二部分 · 记录</span>
+                            <span class="en2">PART TWO · RECORD</span>
+                        </div>
+
+                        <div class="hd" style="margin-bottom:.5em">
+                            <span class="dot">11</span>
+                            <h2>兑换记录<small>Redemption Record</small></h2>
+                        </div>
+
+                        <div class="redeem-list" id="redeemList"></div>
+
+                        <div class="pager" style="margin-top:.55em">
+                            <button id="redPrev" type="button" title="上一页 / Prev">◀</button>
+                            <span class="page-info" id="redPageInfo">第 1 / 1 页</span>
+                            <button id="redNext" type="button" title="下一页 / Next">▶</button>
+                        </div>
+
+                        <button class="add-btn" id="addRedeemBtn" style="margin-top:.6em">＋ 新增一次兑换 · Add a
+                            redemption</button>
+
+                        <div class="card tint-b" style="margin-top:.7em;font-size:.72em">
+                            <b>共同约定：</b>一次只能兑换一张奖励券，不能多张叠加；兑换完成后卡片回收作废。
+                            所有券使用前请提前和家长商量好时间。
+                            <div class="en" style="margin-top:.3em">
+                                One coupon at a time. Coupons are collected after use. Plan the time together in
+                                advance.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spine" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prevBtn" aria-label="上一页">◀ 上一页</button>
+        <div class="counter" id="counter">1 / 7</div>
+        <button class="btn" id="nextBtn" aria-label="下一页">下一页 ▶</button>
+    </div>
+    <div class="hint">点击按钮翻页 · 也可以用键盘 ← → 翻页 · Click or use arrow keys</div>
+
+    <input type="file" id="pigFileInput" accept="image/*" hidden>
+
+    <script>
+        /* ============================================================
+           一、翻书
+           ============================================================ */
+        (function () {
+            const book = document.getElementById('book');
+            const leaves = Array.from(book.querySelectorAll('.leaf'));
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const counter = document.getElementById('counter');
+            const TOTAL = leaves.length;
+            let flipped = 0;
+
+            function render(animate) {
+                leaves.forEach((leaf, i) => {
+                    const isFlipped = i < flipped;
+                    if (!animate) leaf.style.transition = 'none';
+                    leaf.classList.toggle('flipped', isFlipped);
+                    leaf.style.zIndex = isFlipped ? (600 + i) : (300 - i);
+                    if (!animate) { void leaf.offsetWidth; leaf.style.transition = ''; }
+                });
+                prevBtn.disabled = (flipped === 0);
+                nextBtn.disabled = (flipped >= TOTAL);
+                counter.textContent = (flipped + 1) + ' / ' + (TOTAL + 1);
+                const movingLeaf = leaves[flipped - 1];
+                if (movingLeaf && animate) {
+                    movingLeaf.classList.add('flipping');
+                    setTimeout(() => movingLeaf.classList.remove('flipping'), 950);
+                }
+            }
+            function next() { if (flipped < TOTAL) { flipped++; render(true); } }
+            function prev() { if (flipped > 0) { flipped--; render(true); } }
+
+            nextBtn.addEventListener('click', next);
+            prevBtn.addEventListener('click', prev);
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight') next();
+                if (e.key === 'ArrowLeft') prev();
+            });
+
+            let touchX = null, touchY = null;
+            document.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    touchX = e.touches[0].clientX;
+                    touchY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+            document.addEventListener('touchend', e => {
+                if (touchX === null) return;
+                const dx = e.changedTouches[0].clientX - touchX;
+                const dy = e.changedTouches[0].clientY - touchY;
+                if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+                    dx < 0 ? next() : prev();
+                }
+                touchX = touchY = null;
+            }, { passive: true });
+
+            render(false);
+        })();
+
+        /* ============================================================
+           二、封面中间的小猪贴纸：点击更换 + 本地记忆
+           ============================================================ */
+        (function () {
+            const KEY = 'passbook-pig-v1';
+            const wrap = document.getElementById('pigWrap');
+            const img = document.getElementById('pigImg');
+            const file = document.getElementById('pigFileInput');
+
+            try {
+                const saved = localStorage.getItem(KEY);
+                if (saved) {
+                    img.src = saved;
+                    img.classList.remove('is-hidden');
+                }
+            } catch (e) { }
+
+            img.addEventListener('error', () => {
+                img.classList.add('is-hidden');
+                wrap.classList.add('is-empty');
+            });
+            img.addEventListener('load', () => {
+                img.classList.remove('is-hidden');
+                wrap.classList.remove('is-empty');
+            });
+
+            function openPicker() {
+                file.value = '';
+                file.click();
+            }
+            wrap.addEventListener('click', openPicker);
+            wrap.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openPicker();
+                }
+            });
+
+            file.addEventListener('change', e => {
+                const f = e.target.files && e.target.files[0];
+                if (!f || !f.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    img.src = ev.target.result;
+                    img.classList.remove('is-hidden');
+                    wrap.classList.remove('is-empty');
+                    try { localStorage.setItem(KEY, ev.target.result); } catch (err) { }
+                };
+                reader.readAsDataURL(f);
+            });
+        })();
+
+        /* ============================================================
+           三、奖励券仓库
+           ============================================================ */
+        const COUPON_KEY = 'passbook-coupons-v1';
+
+        const DEFAULT_COUPONS = {
+            c1: [
+                { t: '免写家庭作业券', s: '可免除一次家庭常规书面作业。', en: 'No-Homework Coupon' },
+                { t: '周末零食券', s: '周末自选一份小零食（提前约定品类、预算）。', en: 'Weekend Snack Coupon' },
+                { t: '延后半小时睡觉券', s: '可以比平时晚睡半小时，仅限周末使用。', en: 'Stay Up 30 Minutes' },
+                { t: '30 分钟自由玩耍券', s: '额外获得 30 分钟自由安排时间。', en: '30-Minute Free Play' },
+                { t: '亲子陪伴券', s: '爸爸妈妈陪我做一件我想做的事，约 40 分钟。', en: 'Parent & Me Time' },
+                { t: '电影观看券', s: '周末看一部提前商量好的电影／动画长片。', en: 'Movie Night' }
+            ],
+            c2: [
+                { t: '公园游玩券', s: '安排一次公园出游，可以骑车、散步、玩设施。', en: 'Park Trip Coupon' },
+                { t: '免收拾房间券（适度）', s: '单次免除自己房间的整理任务，公共区域仍需保持整洁。', en: 'No Room Tidy' },
+                { t: '家庭点餐券', s: '由我决定一顿饭吃什么（在约定预算内）。', en: 'Family Menu Picker' },
+                { t: '睡前多读一本券', s: '今晚多讲一本绘本，睡觉时间最多顺延 15 分钟。', en: 'One More Story' },
+                { t: '小小助手券', s: '当一次爸爸妈妈的小助手，一起完成一件小事。', en: 'Little Helper' },
+                { t: '一起做饭券', s: '和爸爸妈妈一起做一道简单的菜或点心，并一起吃光它。', en: 'Cook Together' }
+            ],
+            c3: [
+                { t: '洗澡玩水加时券', s: '洗澡时间可以多玩 10 分钟（遵守安全规则，不浪费水）。', en: 'Longer Bath Time' },
+                { t: '亲子游戏券', s: '和爸爸妈妈玩一局约定的游戏，约 30 分钟。', en: 'Family Game Time' },
+                { t: '专属拥抱时光券', s: '随时插队领到一个大大的拥抱 + 5 分钟专属陪伴。', en: 'Big Hug Time' },
+                { t: '公园喂小动物券', s: '去公园或农场喂一次小动物（喂鱼、鸽子、兔子等）。', en: 'Feed the Animals' },
+                { t: '自制甜品券', s: '一起做一份简单的甜品（水果酸奶杯、布丁等），做完自己吃。', en: 'Make a Dessert' },
+                { t: '夜宿客厅帐篷券', s: '周末在客厅搭个小帐篷，全家一起“露营”睡一晚。', en: 'Living Room Camping' },
+                { t: '朋友来家玩券', s: '邀请一位好朋友来家里玩一次（家长提前商定时间）。', en: 'Playdate' },
+                { t: '许一个小心愿券', s: '说一个合理范围内的小心愿，全家一起想办法帮我实现。', en: 'One Little Wish' }
+            ]
+        };
+
+        let couponData = (function () {
+            const d = JSON.parse(JSON.stringify(DEFAULT_COUPONS));
+            try {
+                const raw = localStorage.getItem(COUPON_KEY);
+                if (raw) {
+                    const s = JSON.parse(raw);
+                    ['c1', 'c2', 'c3'].forEach(k => {
+                        if (Array.isArray(s[k])) d[k] = s[k];
+                    });
+                }
+            } catch (e) { }
+            return d;
+        })();
+
+        function saveCoupons() {
+            try { localStorage.setItem(COUPON_KEY, JSON.stringify(couponData)); } catch (e) { }
+            window.dispatchEvent(new CustomEvent('couponsUpdated'));
+        }
+
+        function getAllCouponNames() {
+            const arr = [...couponData.c1, ...couponData.c2, ...couponData.c3];
+            return arr.map(c => {
+                const parts = [c.t || ''];
+                if (c.en) parts.push(c.en);
+                return parts.join(' · ');
+            }).filter(Boolean);
+        }
+
+        /* ============================================================
+           四、奖励券：可编辑 + 可新增 + 保存
+           ============================================================ */
+        (function () {
+            const ICONS = ['3.jpg', '4.jpg', '5.jpg', '7.jpg'];
+
+            function renderList(key) {
+                const wrap = document.getElementById('list-' + key);
+                if (!wrap) return;
+                wrap.innerHTML = '';
+                couponData[key].forEach((c, idx) => wrap.appendChild(makeCard(key, idx)));
+            }
+
+            function makeCard(key, idx) {
+                const c = couponData[key][idx];
+                const el = document.createElement('div');
+                el.className = 'coupon';
+
+                const img = document.createElement('img');
+                img.className = 'c-ic';
+                img.src = c.icon || ICONS[idx % ICONS.length];
+                img.alt = '';
+                img.onerror = function () { this.style.visibility = 'hidden'; };
+
+                const tx = document.createElement('div');
+                tx.className = 'c-tx';
+
+                const t = document.createElement('div');
+                t.className = 'c-t';
+                t.textContent = c.t;
+
+                const s = document.createElement('div');
+                s.className = 'c-s';
+                s.textContent = c.s + (c.en ? ' · ' + c.en : '');
+
+                tx.append(t, s);
+
+                const acts = document.createElement('div');
+                acts.className = 'c-acts';
+
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'mini-btn';
+                editBtn.textContent = '✏️';
+                editBtn.title = '编辑 / Edit';
+                editBtn.addEventListener('click', () => enterEdit(el, key, idx));
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'mini-btn';
+                delBtn.textContent = '🗑️';
+                delBtn.title = '删除 / Delete';
+                delBtn.addEventListener('click', () => {
+                    couponData[key].splice(idx, 1);
+                    saveCoupons();
+                    renderList(key);
+                });
+
+                acts.append(editBtn, delBtn);
+                el.append(img, tx, acts);
+                return el;
+            }
+
+            function enterEdit(el, key, idx) {
+                const c = couponData[key][idx];
+                const tx = el.querySelector('.c-tx');
+                tx.innerHTML = '';
+
+                const iT = document.createElement('input');
+                iT.className = 'c-input';
+                iT.value = c.t;
+                iT.placeholder = '名称 / Title';
+
+                const iS = document.createElement('input');
+                iS.className = 'c-input c-input-sm';
+                iS.value = c.s;
+                iS.placeholder = '说明 / Description';
+
+                const iE = document.createElement('input');
+                iE.className = 'c-input c-input-sm';
+                iE.value = c.en || '';
+                iE.placeholder = 'English name';
+
+                tx.append(iT, iS, iE);
+
+                const acts = el.querySelector('.c-acts');
+                acts.innerHTML = '';
+
+                const ok = document.createElement('button');
+                ok.type = 'button';
+                ok.className = 'mini-btn ok';
+                ok.textContent = '✓';
+                ok.title = '保存 / Save';
+
+                const no = document.createElement('button');
+                no.type = 'button';
+                no.className = 'mini-btn';
+                no.textContent = '✕';
+                no.title = '取消 / Cancel';
+
+                acts.append(ok, no);
+
+                function doSave() {
+                    const nt = iT.value.trim();
+                    if (!nt) { iT.focus(); return; }
+                    couponData[key][idx].t = nt;
+                    couponData[key][idx].s = iS.value.trim();
+                    couponData[key][idx].en = iE.value.trim();
+                    saveCoupons();
+                    renderList(key);
+                }
+                ok.addEventListener('click', doSave);
+                no.addEventListener('click', () => renderList(key));
+                [iT, iS, iE].forEach(inp => {
+                    inp.addEventListener('keydown', e => {
+                        if (e.key === 'Enter') doSave();
+                        if (e.key === 'Escape') renderList(key);
+                    });
+                });
+
+                iT.focus();
+                iT.select();
+            }
+
+            document.querySelectorAll('[data-add]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const key = btn.dataset.add;
+                    const idx = couponData[key].length;
+                    couponData[key].push({
+                        t: '新奖励券',
+                        s: '写下这张券可以做什么…',
+                        en: 'New Coupon',
+                        icon: ICONS[idx % ICONS.length]
+                    });
+                    saveCoupons();
+                    renderList(key);
+                    const wrap = document.getElementById('list-' + key);
+                    const last = wrap.lastElementChild;
+                    if (last) enterEdit(last, key, couponData[key].length - 1);
+                });
+            });
+
+            renderList('c1');
+            renderList('c2');
+            renderList('c3');
+        })();
+
+        /* ============================================================
+           五、成长存款记录（每页 5 条）
+           ============================================================ */
+        (function () {
+            const body = document.getElementById('recBody');
+            const addBtn = document.getElementById('addRecBtn');
+            const barFill = document.getElementById('barFill');
+            const barText = document.getElementById('barText');
+            const pagerPrev = document.getElementById('recPrev');
+            const pagerNext = document.getElementById('recNext');
+            const pagerInfo = document.getElementById('recPageInfo');
+
+            const PER = 5;
+
+            const PH = {
+                did: '像摄像机一样，客观写我做了什么…\nWrite what I did, like a camera…',
+                happened: '这件事带来了什么结果？\nWhat happened as a result?',
+                learned: '下次遇到同样的情况，我打算怎么做…\nWhat will I do next time?'
+            };
+
+            let records = [];
+            let page = 0;
+
+            for (let i = 0; i < PER; i++) {
+                records.push({ did: '', happened: '', learned: '', checked: false });
+            }
+
+            function totalPages() {
+                return Math.max(1, Math.ceil(records.length / PER));
+            }
+
+            function autoGrow(el) {
+                el.style.height = 'auto';
+                el.style.height = (el.scrollHeight + 2) + 'px';
+            }
+
+            function updateProgress() {
+                const ticks = records.filter(r => r.checked).length;
+                const cycles = Math.floor(ticks / 5);
+                const cur = ticks % 5;
+
+                barFill.style.width = ((ticks > 0 && cur === 0) ? 100 : (cur / 5 * 100)) + '%';
+
+                if (cycles > 0) {
+                    barText.textContent = '已存 ' + ticks + ' 笔 · 可兑换 ' + cycles + ' 次';
+                } else {
+                    barText.textContent = '已存 ' + ticks + ' 笔 · 本轮 ' + cur + '/5';
+                }
+            }
+
+            function renderPage() {
+                body.innerHTML = '';
+
+                const start = page * PER;
+                const end = Math.min(records.length, start + PER);
+
+                for (let i = start; i < end; i++) {
+                    body.appendChild(makeRow(records[i], i, i - start + 1));
+                }
+
+                if (end === start) {
+                    body.appendChild(makeRow({ did: '', happened: '', learned: '', checked: false }, start, 1));
+                }
+
+                pagerInfo.textContent = '第 ' + (page + 1) + ' / ' + totalPages() + ' 页';
+                pagerPrev.disabled = (page === 0);
+                pagerNext.disabled = (page >= totalPages() - 1);
+
+                updateProgress();
+
+                requestAnimationFrame(() => {
+                    body.querySelectorAll('textarea').forEach(autoGrow);
+                });
+            }
+
+            function makeRow(rec, gIdx, dispIdx) {
+                const tr = document.createElement('tr');
+
+                const idx = document.createElement('td');
+                idx.className = 'idx';
+                idx.appendChild(document.createTextNode(String(dispIdx)));
+
+                const del = document.createElement('button');
+                del.type = 'button';
+                del.className = 'row-del';
+                del.textContent = '×';
+                del.title = '删除这一笔 / Delete';
+                del.addEventListener('click', () => {
+                    if (records.length <= 1) return;
+                    records.splice(gIdx, 1);
+                    const tp = totalPages();
+                    if (page >= tp) page = tp - 1;
+                    renderPage();
+                });
+                idx.appendChild(del);
+
+                const fields = ['did', 'happened', 'learned'];
+                const tds = fields.map(f => {
+                    const td = document.createElement('td');
+                    const ta = document.createElement('textarea');
+                    ta.rows = 1;
+                    ta.value = rec[f] || '';
+                    ta.placeholder = PH[f];
+                    ta.addEventListener('input', () => {
+                        rec[f] = ta.value;
+                        autoGrow(ta);
+                    });
+                    td.appendChild(ta);
+                    return td;
+                });
+
+                const boxTd = document.createElement('td');
+                boxTd.className = 'box';
+                const tick = document.createElement('button');
+                tick.type = 'button';
+                tick.className = 'tick' + (rec.checked ? ' on' : '');
+                tick.textContent = '✓';
+                tick.setAttribute('aria-label', '存入 / Deposit');
+                tick.addEventListener('click', () => {
+                    rec.checked = !rec.checked;
+                    tick.classList.toggle('on', rec.checked);
+                    updateProgress();
+                });
+                boxTd.appendChild(tick);
+
+                tr.append(idx, ...tds, boxTd);
+                return tr;
+            }
+
+            addBtn.addEventListener('click', () => {
+                records.push({ did: '', happened: '', learned: '', checked: false });
+                const newIdx = records.length - 1;
+                page = Math.floor(newIdx / PER);
+                renderPage();
+
+                requestAnimationFrame(() => {
+                    const localIdx = newIdx % PER;
+                    const rows = body.querySelectorAll('tr');
+                    const tr = rows[localIdx];
+                    if (tr) {
+                        const ta = tr.querySelector('textarea');
+                        if (ta) ta.focus();
+                        tr.scrollIntoView({ block: 'nearest' });
+                    }
+                });
+            });
+
+            pagerPrev.addEventListener('click', () => {
+                if (page > 0) { page--; renderPage(); }
+            });
+            pagerNext.addEventListener('click', () => {
+                if (page < totalPages() - 1) { page++; renderPage(); }
+            });
+
+            renderPage();
+        })();
+
+        /* ============================================================
+           六、兑换记录（每页 5 条）
+           ============================================================ */
+        (function () {
+            const list = document.getElementById('redeemList');
+            const addBtn = document.getElementById('addRedeemBtn');
+            const pagerPrev = document.getElementById('redPrev');
+            const pagerNext = document.getElementById('redNext');
+            const pagerInfo = document.getElementById('redPageInfo');
+
+            const PER = 5;
+
+            let redeems = [];
+            let page = 0;
+
+            for (let i = 0; i < PER; i++) {
+                redeems.push({ date: '', coupon: '', child: '', parent: '' });
+            }
+
+            function totalPages() {
+                return Math.max(1, Math.ceil(redeems.length / PER));
+            }
+
+            function buildOptions(sel, keepValue) {
+                const names = getAllCouponNames();
+                sel.innerHTML = '';
+                const o0 = document.createElement('option');
+                o0.value = ''; o0.textContent = '— 请选择 —';
+                sel.appendChild(o0);
+                names.forEach(n => {
+                    const o = document.createElement('option');
+                    o.value = n; o.textContent = n;
+                    sel.appendChild(o);
+                });
+                if (keepValue && names.indexOf(keepValue) !== -1) {
+                    sel.value = keepValue;
+                } else {
+                    sel.value = '';
+                }
+            }
+
+            function renderPage() {
+                list.innerHTML = '';
+
+                const start = page * PER;
+                const end = Math.min(redeems.length, start + PER);
+
+                for (let i = start; i < end; i++) {
+                    list.appendChild(makeCard(redeems[i], i, i - start + 1));
+                }
+
+                if (end === start) {
+                    list.appendChild(makeCard({ date: '', coupon: '', child: '', parent: '' }, start, 1));
+                }
+
+                pagerInfo.textContent = '第 ' + (page + 1) + ' / ' + totalPages() + ' 页';
+                pagerPrev.disabled = (page === 0);
+                pagerNext.disabled = (page >= totalPages() - 1);
+            }
+
+            function makeCard(r, gIdx, dispIdx) {
+                const card = document.createElement('div');
+                card.className = 'redeem-card';
+
+                const head = document.createElement('div');
+                head.className = 'rc-head';
+                const num = document.createElement('span');
+                num.className = 'rc-num';
+                num.textContent = '兑换 #' + dispIdx;
+
+                const del = document.createElement('button');
+                del.type = 'button';
+                del.className = 'rc-del';
+                del.textContent = '×';
+                del.title = '删除这条记录 / Delete';
+                del.addEventListener('click', () => {
+                    if (redeems.length <= 1) return;
+                    redeems.splice(gIdx, 1);
+                    const tp = totalPages();
+                    if (page >= tp) page = tp - 1;
+                    renderPage();
+                });
+                head.append(num, del);
+
+                const grid = document.createElement('div');
+                grid.className = 'rc-grid';
+
+                const l1 = document.createElement('label');
+                l1.innerHTML = '<span>兑换日期</span>';
+                const d = document.createElement('input');
+                d.type = 'date';
+                d.value = r.date || '';
+                d.addEventListener('change', () => r.date = d.value);
+                l1.appendChild(d);
+
+                const l2 = document.createElement('label');
+                l2.innerHTML = '<span>奖励券</span>';
+                const sel = document.createElement('select');
+                buildOptions(sel, r.coupon);
+                sel.addEventListener('change', () => r.coupon = sel.value);
+                l2.appendChild(sel);
+
+                const l3 = document.createElement('label');
+                l3.innerHTML = '<span>孩子签字</span>';
+                const s1 = document.createElement('input');
+                s1.type = 'text'; s1.placeholder = 'Child';
+                s1.value = r.child || '';
+                s1.addEventListener('input', () => r.child = s1.value);
+                l3.appendChild(s1);
+
+                const l4 = document.createElement('label');
+                l4.innerHTML = '<span>家长签字</span>';
+                const s2 = document.createElement('input');
+                s2.type = 'text'; s2.placeholder = 'Parent';
+                s2.value = r.parent || '';
+                s2.addEventListener('input', () => r.parent = s2.value);
+                l4.appendChild(s2);
+
+                grid.append(l1, l2, l3, l4);
+                card.append(head, grid);
+                return card;
+            }
+
+            window.addEventListener('couponsUpdated', () => {
+                list.querySelectorAll('select').forEach(sel => {
+                    const cur = sel.value;
+                    buildOptions(sel, cur);
+                });
+            });
+
+            addBtn.addEventListener('click', () => {
+                redeems.push({ date: '', coupon: '', child: '', parent: '' });
+                const newIdx = redeems.length - 1;
+                page = Math.floor(newIdx / PER);
+                renderPage();
+
+                requestAnimationFrame(() => {
+                    const localIdx = newIdx % PER;
+                    const card = list.children[localIdx];
+                    if (card) {
+                        const sel = card.querySelector('select');
+                        if (sel) sel.focus();
+                        card.scrollIntoView({ block: 'nearest' });
+                    }
+                });
+            });
+
+            pagerPrev.addEventListener('click', () => {
+                if (page > 0) { page--; renderPage(); }
+            });
+            pagerNext.addEventListener('click', () => {
+                if (page < totalPages() - 1) { page++; renderPage(); }
+            });
+
+            renderPage();
+        })();
+    </script>
+</body>
+
+</html>
