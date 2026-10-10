@@ -3,9 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的成长存折 · My Growth Passbook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>我的成长存折 · My Mistake Passbook</title>
+
     <style>
+        /* ==================== 字体 ==================== */
+        @font-face {
+            font-family: 'SharkFit';
+            src: url('./fonts/YouSheShaYuFeiTeJianKangTi.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         /* ==================== 基础 ==================== */
         * {
             box-sizing: border-box;
@@ -28,6 +38,7 @@
             --yellow-soft: #fff5d6;
             --green: #7ac943;
             --green-soft: #e2f6d8;
+            --gold: #ffb400;
         }
 
         html,
@@ -38,7 +49,10 @@
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: "Comic Sans MS", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+            font-family: 'SharkFit',
+                "YouYuan", "幼圆",
+                "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                system-ui, sans-serif;
             color: var(--ink);
             background:
                 radial-gradient(circle at 12% 0%, #d6efff 0%, transparent 45%),
@@ -50,8 +64,9 @@
             align-items: center;
             justify-content: center;
             gap: 16px;
-            padding: 22px 14px 26px;
+            padding: 22px 14px calc(26px + env(safe-area-inset-bottom, 0px));
             overflow-x: hidden;
+            letter-spacing: .02em;
         }
 
         /* ==================== 背景装饰 ==================== */
@@ -242,7 +257,7 @@
             display: flex;
             flex-direction: column;
             font-size: clamp(12px, 3.1cqw, 16.5px);
-            line-height: 1.55;
+            line-height: 1.62;
             overflow-y: auto;
             overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
@@ -265,7 +280,7 @@
             display: flex;
             align-items: center;
             gap: .5em;
-            margin: 0 0 .7em;
+            margin: 0 0 .8em;
             flex-shrink: 0
         }
 
@@ -281,22 +296,25 @@
             font-size: .82em;
             font-weight: 700;
             box-shadow: 0 3px 0 rgba(30, 95, 146, .3);
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .hd h2 {
             margin: 0;
             font-size: 1.42em;
-            line-height: 1.15;
-            color: var(--blue-deep)
+            line-height: 1.25;
+            color: var(--blue-deep);
+            letter-spacing: .03em
         }
 
         .hd h2 small {
             display: block;
-            font-size: .54em;
+            font-size: .5em;
             color: var(--ink-soft);
             font-weight: 400;
-            letter-spacing: .06em;
-            margin-top: .15em
+            letter-spacing: .1em;
+            margin-top: .28em;
+            font-family: "Comic Sans MS", "PingFang SC", system-ui, sans-serif;
         }
 
         .hd .pill {
@@ -313,21 +331,23 @@
         }
 
         p {
-            margin: 0 0 .65em
+            margin: 0 0 .7em
         }
 
         .en {
             color: var(--ink-soft);
-            font-size: .8em;
-            line-height: 1.4
+            font-size: .74em;
+            line-height: 1.5;
+            font-family: "Comic Sans MS", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+            letter-spacing: 0;
         }
 
         .card {
             background: #fff;
             border: 2px dashed var(--line);
             border-radius: 14px;
-            padding: .75em .9em;
-            margin-bottom: .6em
+            padding: .8em .95em;
+            margin-bottom: .7em
         }
 
         .card.tint-b {
@@ -351,15 +371,16 @@
 
         .rule {
             display: flex;
-            gap: .55em;
-            margin-bottom: .5em;
-            align-items: flex-start
+            gap: .6em;
+            margin-bottom: .68em;
+            align-items: flex-start;
+            line-height: 1.62
         }
 
         .rule .ic {
             flex: 0 0 auto;
             font-size: 1.05em;
-            line-height: 1.3
+            line-height: 1.35
         }
 
         .hl {
@@ -414,18 +435,18 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: .5em;
-            margin-bottom: .6em
+            margin-bottom: .7em
         }
 
         .ex .col {
             background: #fff;
             border-radius: 12px;
-            padding: .55em .6em;
+            padding: .6em .65em;
             border: 1.5px solid var(--line)
         }
 
         .ex .col h4 {
-            margin: 0 0 .3em;
+            margin: 0 0 .35em;
             font-size: .78em;
             color: var(--blue-deep);
             display: flex;
@@ -436,15 +457,16 @@
         .ex .col p {
             font-size: .76em;
             margin: 0;
-            line-height: 1.45
+            line-height: 1.55
         }
 
         .ex .col em {
             display: block;
             font-style: normal;
-            font-size: .85em;
+            font-size: .82em;
             color: var(--ink-soft);
-            margin-top: .22em
+            margin-top: .25em;
+            font-family: "Comic Sans MS", system-ui, sans-serif
         }
 
         /* ==================== 奖励券 ==================== */
@@ -455,8 +477,8 @@
             background: #fff;
             border: 2px dashed #a8d8f2;
             border-radius: 14px;
-            padding: .42em .6em;
-            margin-bottom: .42em;
+            padding: .48em .65em;
+            margin-bottom: .48em;
             position: relative;
             overflow: hidden;
         }
@@ -497,17 +519,17 @@
         }
 
         .coupon .c-t {
-            font-size: .86em;
+            font-size: .88em;
             font-weight: 700;
             color: var(--blue-deep);
-            line-height: 1.25
+            line-height: 1.35
         }
 
         .coupon .c-s {
             font-size: .66em;
             color: var(--ink-soft);
-            line-height: 1.35;
-            margin-top: .08em
+            line-height: 1.4;
+            margin-top: .1em
         }
 
         .coupon .c-s .en {
@@ -572,7 +594,8 @@
         }
 
         .c-input-sm {
-            font-size: .72em
+            font-size: .72em;
+            font-family: "Comic Sans MS", "PingFang SC", system-ui, sans-serif
         }
 
         .add-btn {
@@ -618,7 +641,7 @@
             color: #fff;
             border-radius: 14px;
             padding: .5em .9em;
-            margin-bottom: .6em;
+            margin-bottom: .7em;
             box-shadow: 0 6px 16px rgba(43, 123, 185, .28);
         }
 
@@ -632,26 +655,28 @@
         }
 
         .part-band .en2 {
-            font-size: .64em;
-            letter-spacing: .16em;
-            opacity: .9
+            font-size: .6em;
+            letter-spacing: .18em;
+            opacity: .9;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .big-title {
-            margin: 0 0 .2em;
+            margin: 0 0 .25em;
             font-size: 1.68em;
-            line-height: 1.15;
+            line-height: 1.25;
             color: var(--blue-deep);
-            letter-spacing: .02em
+            letter-spacing: .03em
         }
 
         .big-title small {
             display: block;
-            font-size: .42em;
+            font-size: .4em;
             color: var(--ink-soft);
-            letter-spacing: .12em;
+            letter-spacing: .14em;
             font-weight: 400;
-            margin-top: .28em
+            margin-top: .4em;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .rec-wrap {
@@ -700,7 +725,7 @@
             padding: .45em .3em;
             border: 1.5px solid #bfe0f5;
             font-weight: 700;
-            line-height: 1.25;
+            line-height: 1.35;
             text-align: center;
             box-shadow: 0 2px 0 #bfe0f5;
         }
@@ -735,6 +760,15 @@
             vertical-align: middle
         }
 
+        .rec tr.redeemed-row td {
+            background: #f6fafd
+        }
+
+        .rec tr.redeemed-row td.idx {
+            background: #e5eff7;
+            color: #8fa8ba
+        }
+
         .rec textarea {
             width: 100%;
             display: block;
@@ -746,7 +780,7 @@
             resize: none;
             outline: none;
             padding: .5em .45em;
-            line-height: 1.4;
+            line-height: 1.5;
             min-height: 3.1em;
             overflow: hidden;
         }
@@ -757,6 +791,11 @@
 
         .rec textarea:focus {
             background: #f2faff
+        }
+
+        .rec textarea:disabled {
+            color: #a8b8c5;
+            background: transparent
         }
 
         .tick {
@@ -787,6 +826,20 @@
             box-shadow: 0 3px 8px rgba(43, 123, 185, .35);
         }
 
+        .tick.redeemed {
+            background: linear-gradient(145deg, #c5d8e5, #9fb8c8);
+            border-color: #9fb8c8;
+            color: #fff;
+            cursor: default;
+            opacity: .65;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .tick.redeemed:hover {
+            border-color: #9fb8c8
+        }
+
         .row-del {
             border: none;
             background: transparent;
@@ -812,7 +865,7 @@
             align-items: center;
             gap: .8em;
             flex-wrap: wrap;
-            margin-top: .55em;
+            margin-top: .6em;
         }
 
         .rec-bottom .progress-bar {
@@ -841,6 +894,73 @@
             border-radius: 99px;
             background: linear-gradient(90deg, #6fc2ec, var(--blue-deep));
             transition: width .4s
+        }
+
+        /* 可兑换提示条 */
+        .redeem-ready {
+            display: none;
+            flex-shrink: 0;
+            margin-top: .55em;
+            padding: .6em .85em;
+            border-radius: 14px;
+            background: linear-gradient(120deg, #fff5d6, #ffe9b0);
+            border: 2px dashed #ffc93c;
+            align-items: center;
+            gap: .6em;
+            box-shadow: 0 4px 12px rgba(255, 180, 0, .18);
+            animation: pulseReady 1.8s ease-in-out infinite;
+        }
+
+        .redeem-ready.show {
+            display: flex
+        }
+
+        @keyframes pulseReady {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1.015)
+            }
+        }
+
+        .redeem-ready .txt {
+            flex: 1;
+            font-size: .82em;
+            font-weight: 700;
+            color: #a86f00;
+            line-height: 1.4;
+        }
+
+        .redeem-ready .go-btn {
+            flex: 0 0 auto;
+            font-family: inherit;
+            font-size: .78em;
+            font-weight: 700;
+            color: #fff;
+            border: none;
+            border-radius: 99px;
+            padding: .5em 1.1em;
+            cursor: pointer;
+            background: linear-gradient(150deg, #ffb400, #ff8a00);
+            box-shadow: 0 3px 0 #cc6e00, 0 6px 14px rgba(255, 140, 0, .35);
+            transition: transform .14s, box-shadow .14s;
+            display: inline-flex;
+            align-items: center;
+            gap: .35em;
+        }
+
+        .redeem-ready .go-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #cc6e00, 0 8px 18px rgba(255, 140, 0, .4)
+        }
+
+        .redeem-ready .go-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #cc6e00
         }
 
         /* 分页器 */
@@ -884,96 +1004,200 @@
             padding: 0 .15em;
         }
 
-        /* ==================== 兑换记录 ==================== */
-        .redeem-list {
+        /* ==================== 兑换历史卡片 ==================== */
+        .history-list {
             display: flex;
             flex-direction: column;
-            gap: .55em
+            gap: .6em
         }
 
-        .redeem-card {
+        .history-card {
             background: #fff;
             border: 2px dashed #a8d8f2;
-            border-radius: 14px;
-            padding: .6em .7em;
-            position: relative
+            border-radius: 16px;
+            padding: .7em .8em;
+            position: relative;
+            cursor: pointer;
+            transition: border-color .15s, box-shadow .15s, background .15s;
         }
 
-        .rc-head {
+        .history-card:hover {
+            border-color: var(--blue-mid);
+            box-shadow: 0 4px 14px rgba(43, 123, 185, .12);
+        }
+
+        .history-card.expanded {
+            border-color: var(--blue);
+            background: #fbfdff;
+            box-shadow: 0 6px 20px rgba(43, 123, 185, .15);
+        }
+
+        .hc-header {
             display: flex;
             align-items: center;
-            gap: .45em;
-            font-size: .76em;
+            gap: .55em;
+            margin-bottom: .4em;
+        }
+
+        .hc-num {
+            background: linear-gradient(145deg, #ffb400, #ff8a00);
+            color: #fff;
+            font-size: .68em;
+            font-weight: 700;
+            padding: .22em .75em;
+            border-radius: 99px;
+            box-shadow: 0 2px 6px rgba(255, 140, 0, .28);
+            white-space: nowrap;
+        }
+
+        .hc-date {
+            font-size: .68em;
+            color: var(--ink-soft);
+            font-family: "Comic Sans MS", system-ui, sans-serif;
+            letter-spacing: .05em;
+        }
+
+        .hc-arrow {
+            margin-left: auto;
+            font-size: .8em;
+            color: var(--blue-mid);
+            transition: transform .25s;
+            line-height: 1;
+        }
+
+        .history-card.expanded .hc-arrow {
+            transform: rotate(180deg);
+            color: var(--blue-deep);
+        }
+
+        .hc-coupon {
+            font-size: .92em;
             font-weight: 700;
             color: var(--blue-deep);
-            margin-bottom: .5em
+            line-height: 1.4;
+            margin-bottom: .35em;
         }
 
-        .rc-head .rc-num {
+        .hc-signs {
+            display: flex;
+            gap: .9em;
+            flex-wrap: wrap;
+            font-size: .68em;
+            color: var(--ink-soft);
+        }
+
+        .hc-toggle-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: .3em;
+            margin-top: .5em;
+            font-size: .66em;
+            color: var(--blue-deep);
             background: var(--blue-soft);
             border-radius: 99px;
-            padding: .16em .7em
+            padding: .22em .7em;
+            font-weight: 700;
         }
 
-        .rc-del {
-            margin-left: auto;
-            border: none;
-            background: transparent;
-            color: #c8d9e5;
-            cursor: pointer;
-            font-size: 1.15em;
-            line-height: 1;
-            font-family: inherit;
-            padding: 0 .25em
+        .history-card.expanded .hc-toggle-hint {
+            background: linear-gradient(120deg, #e6f6ff, #d4ecfb);
         }
 
-        .rc-del:hover {
-            color: #e2618b
+        /* 折叠区：对应的 5 条成长记录 */
+        .hc-records {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease, margin-top .25s ease, opacity .25s ease;
+            opacity: 0;
+            margin-top: 0;
         }
 
-        .rc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: .42em .7em
+        .history-card.expanded .hc-records {
+            max-height: 2000px;
+            opacity: 1;
+            margin-top: .75em;
+            padding-top: .75em;
+            border-top: 1.5px dashed #d6ecfa;
         }
 
-        .rc-grid label {
+        .hc-records-title {
+            font-size: .72em;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: .5em;
             display: flex;
             align-items: center;
-            gap: .4em;
+            gap: .35em;
+        }
+
+        .hc-record {
+            background: #f7fcff;
+            border-radius: 10px;
+            padding: .55em .7em;
+            margin-bottom: .45em;
             font-size: .72em;
-            color: var(--ink-soft);
-            min-width: 0
+            line-height: 1.55;
+            border-left: 3px solid #a8d8f2;
         }
 
-        .rc-grid label span {
-            white-space: nowrap
+        .hc-record:last-child {
+            margin-bottom: 0
         }
 
-        .rc-grid input,
-        .rc-grid select {
-            flex: 1;
-            min-width: 0;
-            font-family: inherit;
-            font-size: 1em;
+        .hc-record .hr-idx {
+            display: inline-block;
+            background: var(--blue-soft);
+            color: var(--blue-deep);
+            font-weight: 700;
+            font-size: .9em;
+            border-radius: 50%;
+            width: 1.6em;
+            height: 1.6em;
+            text-align: center;
+            line-height: 1.6em;
+            margin-right: .4em;
+            vertical-align: top;
+        }
+
+        .hc-record .hr-body {
+            display: inline-block;
+            width: calc(100% - 2.2em);
+            vertical-align: top
+        }
+
+        .hc-record .hr-line {
+            margin-bottom: .2em;
             color: var(--ink);
-            border: none;
-            border-bottom: 1.6px dotted #b8d8ee;
-            background: transparent;
-            padding: .2em .15em;
-            outline: none;
         }
 
-        .rc-grid input:focus,
-        .rc-grid select:focus {
-            background: #f2faff;
-            border-bottom-color: var(--blue)
+        .hc-record .hr-line:last-child {
+            margin-bottom: 0
         }
 
-        .rc-grid select {
-            cursor: pointer;
-            appearance: none;
-            background-image: none
+        .hc-record .hr-line b {
+            color: var(--blue-deep);
+            font-weight: 700;
+            margin-right: .25em;
+        }
+
+        .hc-record .hr-line.empty {
+            color: #b9cbd8;
+            font-style: italic;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 2.5em 1em;
+            color: var(--ink-soft);
+            font-size: .86em;
+            line-height: 1.8;
+        }
+
+        .history-empty .big {
+            font-size: 3.2em;
+            display: block;
+            margin-bottom: .4em;
+            opacity: .55
         }
 
         /* ==================== 封面 ==================== */
@@ -1088,7 +1312,7 @@
             font-weight: 700;
             color: #5f93b8;
             text-align: center;
-            line-height: 1.25;
+            line-height: 1.3;
             padding: .4em;
             pointer-events: none;
         }
@@ -1119,43 +1343,46 @@
         }
 
         .cover h1 {
-            margin: .28em 0 .05em;
+            margin: .3em 0 .1em;
             font-size: 2.02em;
-            line-height: 1.12;
-            letter-spacing: .03em;
+            line-height: 1.25;
+            letter-spacing: .04em;
             color: var(--blue-deep);
             text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(168, 220, 247, .7);
         }
 
         .cover .en-title {
-            font-size: .74em;
-            letter-spacing: .3em;
+            font-size: .72em;
+            letter-spacing: .28em;
             color: #5f93b8;
             font-weight: 700;
-            margin-bottom: .6em
+            margin-bottom: .7em;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .cover .divider {
             width: 60%;
             height: 3px;
             border-radius: 9px;
-            margin: .1em 0 .7em;
+            margin: .1em 0 .8em;
             background: repeating-linear-gradient(90deg, var(--blue) 0 10px, transparent 10px 18px);
             opacity: .6;
         }
 
         .cover .motto {
-            font-size: .92em;
+            font-size: .94em;
             font-weight: 700;
             color: #3f6b88;
-            margin-bottom: .1em
+            margin-bottom: .25em;
+            line-height: 1.55
         }
 
         .cover .motto-en {
             font-size: .66em;
             color: var(--ink-soft);
-            line-height: 1.5;
-            margin-bottom: .35em
+            line-height: 1.6;
+            margin-bottom: .4em;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .cover .fields {
@@ -1165,19 +1392,19 @@
             color: #6f93a8;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 1.15em;
+            margin-top: 1.2em;
         }
 
         .cover .field-item {
             display: flex;
             align-items: flex-end;
-            gap: .55em;
+            gap: .55em
         }
 
         .cover .field-label {
             white-space: nowrap;
             line-height: 1.5;
-            padding-bottom: .18em;
+            padding-bottom: .18em
         }
 
         .cover .field-input {
@@ -1197,12 +1424,12 @@
 
         .cover .field-input:focus {
             border-bottom-color: var(--blue);
-            background: rgba(255, 255, 255, .65);
+            background: rgba(255, 255, 255, .65)
         }
 
         .cover .field-input::placeholder {
             color: #c3d9e8;
-            font-size: .9em;
+            font-size: .9em
         }
 
         /* ==================== 封底 ==================== */
@@ -1223,18 +1450,19 @@
         .end-title {
             margin: 0;
             font-size: 2em;
-            line-height: 1.15;
+            line-height: 1.25;
             color: var(--blue-deep);
-            letter-spacing: .04em;
+            letter-spacing: .05em;
             text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(168, 220, 247, .6);
         }
 
         .end-sub {
-            font-size: .68em;
+            font-size: .66em;
             letter-spacing: .4em;
             color: #5f93b8;
             font-weight: 700;
-            margin-top: .15em;
+            margin-top: .25em;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .end-divider {
@@ -1247,18 +1475,19 @@
         }
 
         .end-line {
-            font-size: .98em;
+            font-size: 1em;
             font-weight: 700;
             color: #3f6b88;
             margin: .1em 0;
-            line-height: 1.5;
+            line-height: 1.6
         }
 
         .end-line-en {
             font-size: .72em;
             color: var(--ink-soft);
             margin: .15em 0 .9em;
-            line-height: 1.5;
+            line-height: 1.55;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
         }
 
         .end-badges {
@@ -1266,7 +1495,7 @@
             gap: .55em;
             flex-wrap: wrap;
             justify-content: center;
-            margin: .2em 0 .9em;
+            margin: .2em 0 .9em
         }
 
         .end-badges .badge {
@@ -1284,7 +1513,7 @@
             font-size: 1.05em;
             font-weight: 700;
             color: #e2618b;
-            margin: .1em 0 0;
+            margin: .1em 0 0
         }
 
         /* ==================== 控制条 ==================== */
@@ -1349,23 +1578,343 @@
             z-index: 2;
             font-size: 12px;
             color: #94aebd;
-            text-align: center
+            text-align: center;
+            font-family: "PingFang SC", system-ui, sans-serif;
+            letter-spacing: 0;
+        }
+
+        /* ==================== 弹窗 ==================== */
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(30, 60, 90, .42);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-mask.show {
+            display: flex;
+            animation: fadeIn .2s ease-out
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .modal-box {
+            position: relative;
+            width: min(92vw, 460px);
+            max-height: 88vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 22px;
+            padding: 1.4em 1.3em 1.2em;
+            box-shadow: 0 20px 50px rgba(20, 60, 100, .35);
+            border: 2px solid #d6ecfa;
+            animation: popIn .32s cubic-bezier(.34, 1.56, .64, 1);
+            font-size: 15px;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(.85);
+                opacity: 0
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .modal-title {
+            margin: 0 0 .2em;
+            font-size: 1.35em;
+            line-height: 1.25;
+            color: var(--blue-deep);
+            text-align: center;
+            letter-spacing: .03em;
+        }
+
+        .modal-sub {
+            margin: 0 0 1em;
+            font-size: .7em;
+            color: var(--ink-soft);
+            text-align: center;
+            letter-spacing: .2em;
+            font-family: "Comic Sans MS", system-ui, sans-serif;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: .6em;
+            right: .7em;
+            width: 2em;
+            height: 2em;
+            border-radius: 50%;
+            border: none;
+            background: #f0f7fc;
+            color: #7a9ab0;
+            font-size: .9em;
+            cursor: pointer;
+            line-height: 1;
+            display: grid;
+            place-items: center;
+            font-family: inherit;
+            transition: .15s;
+        }
+
+        .modal-close:hover {
+            background: #e2eef7;
+            color: var(--blue-deep)
+        }
+
+        .mf {
+            display: flex;
+            flex-direction: column;
+            gap: .7em;
+            margin-bottom: 1em
+        }
+
+        .mf label {
+            display: flex;
+            flex-direction: column;
+            gap: .3em;
+            font-size: .78em;
+            color: var(--ink-soft);
+        }
+
+        .mf label span {
+            font-weight: 700;
+            color: var(--blue-deep)
+        }
+
+        .mf input,
+        .mf select {
+            font-family: inherit;
+            font-size: 1.05em;
+            color: var(--ink);
+            border: 1.5px solid #bfe0f5;
+            border-radius: 10px;
+            background: #f7fcff;
+            padding: .5em .7em;
+            outline: none;
+            transition: .15s;
+        }
+
+        .mf input:focus,
+        .mf select:focus {
+            border-color: var(--blue);
+            background: #fff
+        }
+
+        .mf input::placeholder {
+            color: #b9cbd8
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: .6em;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            font-family: inherit;
+            font-size: .86em;
+            font-weight: 700;
+            border: none;
+            border-radius: 99px;
+            padding: .65em 1em;
+            cursor: pointer;
+            transition: transform .14s, box-shadow .14s;
+        }
+
+        .btn-cancel {
+            background: #eef4f8;
+            color: #7a93a6;
+            box-shadow: 0 3px 0 #d6e3ec;
+        }
+
+        .btn-cancel:hover {
+            background: #e3edf4
+        }
+
+        .btn-cancel:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #d6e3ec
+        }
+
+        .btn-confirm {
+            background: linear-gradient(150deg, #ffb400, #ff8a00);
+            color: #fff;
+            box-shadow: 0 3px 0 #cc6e00, 0 6px 14px rgba(255, 140, 0, .32);
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 0 #cc6e00, 0 8px 18px rgba(255, 140, 0, .4)
+        }
+
+        .btn-confirm:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #cc6e00
+        }
+
+        .btn-confirm:disabled {
+            background: #d9e3ea;
+            color: #a8b8c5;
+            box-shadow: 0 3px 0 #c5d1da;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .redeem-preview {
+            background: linear-gradient(120deg, #e6f6ff, #d4ecfb);
+            border: 2px dashed #a8d8f2;
+            border-radius: 14px;
+            padding: .7em .85em;
+            margin-bottom: 1em;
+            font-size: .78em;
+            color: var(--blue-deep);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .redeem-preview b {
+            font-size: 1.15em;
+            color: #a86f00
+        }
+
+        /* ==================== 撒花层 ==================== */
+        #confettiLayer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -60px;
+            will-change: transform;
+            animation: confettiFall linear forwards;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .15));
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(var(--spin, 720deg)) scale(.9);
+                opacity: 0;
+            }
+        }
+
+        .celebrate-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2100;
+            pointer-events: none;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: .4em;
+            text-align: center;
+        }
+
+        .celebrate-toast.show {
+            display: flex
+        }
+
+        .celebrate-toast .ct-emoji {
+            font-size: 4.5em;
+            animation: toastPop .8s cubic-bezier(.34, 1.56, .64, 1);
+            filter: drop-shadow(0 6px 16px rgba(255, 160, 0, .5));
+        }
+
+        .celebrate-toast .ct-text {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: .06em;
+            padding: .35em 1.2em;
+            border-radius: 99px;
+            background: linear-gradient(150deg, #ffb400, #ff7a00);
+            box-shadow: 0 8px 24px rgba(255, 140, 0, .5);
+            animation: toastPop .8s .1s cubic-bezier(.34, 1.56, .64, 1) backwards;
+            white-space: nowrap;
+        }
+
+        .celebrate-toast .ct-sub {
+            font-size: .85em;
+            color: #fff;
+            background: rgba(30, 95, 146, .75);
+            padding: .3em 1em;
+            border-radius: 99px;
+            animation: toastPop .8s .2s cubic-bezier(.34, 1.56, .64, 1) backwards;
+        }
+
+        @keyframes toastPop {
+            0% {
+                transform: scale(.3) translateY(30px);
+                opacity: 0
+            }
+
+            60% {
+                transform: scale(1.08)
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1
+            }
+        }
+
+        .celebrate-toast.fade-out {
+            animation: toastFadeOut .5s forwards;
+        }
+
+        @keyframes toastFadeOut {
+            to {
+                opacity: 0;
+                transform: translate(-50%, -60%)
+            }
         }
 
         /* ==================== 响应式 ==================== */
         @media (max-width:760px) {
             body {
-                padding: 22px 10px 16px;
-                gap: 12px;
-                justify-content: flex-start
+                padding: 16px 10px calc(18px + env(safe-area-inset-bottom, 0px));
+                gap: 10px;
+                justify-content: flex-start;
             }
 
             .stage {
                 width: 94vw;
                 aspect-ratio: .74/1;
-                max-height: 74vh;
+                max-height: 62vh;
                 perspective: 1800px;
-                perspective-origin: 40% 50%
+                perspective-origin: 40% 50%;
             }
 
             .backdrop.left {
@@ -1394,7 +1943,8 @@
 
             .pg {
                 font-size: clamp(13px, 4.2cqw, 16px);
-                padding: 6.5% 6% 5%
+                padding: 6.5% 6% 9%;
+                line-height: 1.65
             }
 
             .cover {
@@ -1403,11 +1953,7 @@
 
             .ex {
                 grid-template-columns: 1fr;
-                gap: .4em
-            }
-
-            .rc-grid {
-                grid-template-columns: 1fr
+                gap: .45em
             }
 
             .btn {
@@ -1457,11 +2003,34 @@
             }
 
             .end-line {
-                font-size: .9em
+                font-size: .92em
             }
 
             .end-thanks {
                 font-size: .95em
+            }
+
+            .hint {
+                font-size: 11px;
+                line-height: 1.4;
+                padding: 0 6px
+            }
+
+            .modal-box {
+                width: 94vw;
+                padding: 1.2em 1.1em 1em
+            }
+
+            .modal-title {
+                font-size: 1.2em
+            }
+
+            .celebrate-toast .ct-emoji {
+                font-size: 3.4em
+            }
+
+            .celebrate-toast .ct-text {
+                font-size: 1.25em
             }
         }
 
@@ -1471,7 +2040,7 @@
             }
 
             .coupon {
-                padding: .36em .5em
+                padding: .4em .55em
             }
 
             .coupon .c-ic {
@@ -1485,6 +2054,23 @@
 
             .rec textarea {
                 min-height: 2.8em
+            }
+
+            .pg {
+                font-size: 13px
+            }
+
+            .redeem-ready .txt {
+                font-size: .76em
+            }
+
+            .redeem-ready .go-btn {
+                font-size: .72em;
+                padding: .45em .9em
+            }
+
+            .hc-record {
+                font-size: .66em
             }
         }
     </style>
@@ -1503,25 +2089,20 @@
     <div class="stage">
         <div class="book" id="book">
 
-            <!-- 左侧底层 -->
             <div class="backdrop left" aria-hidden="true"></div>
 
-            <!-- 右侧底层：存折封底 -->
             <div class="backdrop right">
                 <div class="end-page">
                     <h2 class="end-title">存折封底</h2>
                     <div class="end-sub">THE END</div>
                     <div class="end-divider"></div>
-
                     <p class="end-line">每一次尝试，都是成长的开始。</p>
                     <p class="end-line-en">Every attempt is the beginning of growth.</p>
-
                     <div class="end-badges">
                         <span class="badge">🌱 诚实</span>
                         <span class="badge">💙 反思</span>
                         <span class="badge">⭐ 进步</span>
                     </div>
-
                     <p class="end-thanks">你已经很勇敢了！</p>
                 </div>
             </div>
@@ -1543,11 +2124,10 @@
                             </div>
 
                             <h1>我的成长存折</h1>
-                            <div class="en-title">MY GROWTH PASSBOOK</div>
+                            <div class="en-title">MY MISTAKE PASSBOOK</div>
                             <div class="divider"></div>
                             <p class="motto">犯错是学习的好机会，每次反思都在长大。</p>
-                            <p class="motto-en">Mistakes are learning opportunities.<br>Every reflection helps us grow.
-                            </p>
+                            <p class="motto-en">Mistakes are okay. Repeating them is not.</p>
 
                             <div class="fields">
                                 <label class="field-item">
@@ -1563,7 +2143,6 @@
                     </div>
                 </div>
 
-                <!-- 玩法指南 -->
                 <div class="face back">
                     <div class="pg">
                         <div class="hd">
@@ -1669,7 +2248,7 @@
                             </p>
                         </div>
 
-                        <p class="en" style="font-size:.76em;margin-top:.3em">
+                        <p class="en" style="font-size:.74em;margin-top:.3em">
                             💡 情绪激动的时候先不写；等心情平复了再来记录。写的时候只写事实，不写“我太笨了”“我是坏孩子”这样的标签。
                         </p>
                     </div>
@@ -1722,7 +2301,7 @@
                             </tbody>
                         </table>
 
-                        <div class="card tint-b" style="margin-top:.85em">
+                        <div class="card tint-b" style="margin-top:.9em">
                             <p style="margin:0;font-size:.82em">
                                 <b>不会写字的小朋友：</b>可以口述给爸爸妈妈，请他们帮忙记录，
                                 但内容一定要是你自己想说、自己想到的，不是大人替你编的。
@@ -1761,9 +2340,8 @@
                         </div>
                         <div class="rule"><span class="ic">♻️</span>
                             <div>
-                                兑换完成后，卡片回收作废，存折上的存款也会重新开始计算。
-                                <div class="en">After redeeming, the coupon is collected and your deposit count resets.
-                                </div>
+                                兑换完成后，本轮存款重新开始计算，兑换记录会一直保存。
+                                <div class="en">After redeeming, a new round begins and the record is kept.</div>
                             </div>
                         </div>
                         <div class="rule"><span class="ic">⏰</span>
@@ -1779,10 +2357,10 @@
                             </div>
                         </div>
 
-                        <div class="card tint-y" style="margin-top:.5em">
+                        <div class="card tint-y" style="margin-top:.55em">
                             <div style="font-size:.8em;text-align:center">
                                 🐷 <b>小提醒</b>：奖励券是努力换来的小惊喜，<br>不是讨价还价的筹码哦！
-                                <div class="en" style="margin-top:.35em">Coupons are earned surprises, not bargaining
+                                <div class="en" style="margin-top:.4em">Coupons are earned surprises, not bargaining
                                     chips!</div>
                             </div>
                         </div>
@@ -1797,7 +2375,7 @@
                             <span class="dot">5</span>
                             <h2>填写范例<small>Example Entries</small></h2>
                         </div>
-                        <p class="en" style="margin-bottom:.75em;font-size:.76em">
+                        <p class="en" style="margin-bottom:.8em;font-size:.76em">
                             下面是三个小朋友写得不错的例子，可以照着这样的方式，用自己的话写出来。<br>
                             Three nice examples — try writing yours in your own words.
                         </p>
@@ -1865,8 +2443,8 @@
 
                         <div class="rule"><span class="ic">👨‍👩‍👧</span>
                             <div>
-                                这本存折是全家人一起用的。爸爸妈妈也会犯错，也会写进来。
-                                <div class="en">This passbook is for the whole family — parents write in it too.</div>
+                                爸爸妈妈会陪你一起写，一起反思。
+                                <div class="en">Mom and Dad will write and reflect together with you.</div>
                             </div>
                         </div>
                         <div class="rule"><span class="ic">😌</span>
@@ -1893,13 +2471,6 @@
                                 <div class="en">Repeated mistakes don't count; fix it, then record something new.</div>
                             </div>
                         </div>
-                        <div class="rule"><span class="ic">🎫</span>
-                            <div>
-                                攒够 5 条只能兑换一张奖励券，不能多张叠加；兑换完成，卡片回收作废。
-                                <div class="en">5 deposits = 1 coupon. No stacking. Coupons are collected after use.
-                                </div>
-                            </div>
-                        </div>
                         <div class="rule"><span class="ic">📅</span>
                             <div>
                                 所有奖励券，使用前都需要和家长提前商量时间，不能临时突然要求兑现。
@@ -1910,7 +2481,7 @@
                         <div class="card tint-b" style="margin-top:auto">
                             <div style="font-size:.82em">
                                 <b>我们一起约定 · Our Promise</b>
-                                <div style="display:flex;flex-wrap:wrap;gap:.7em 1.4em;margin-top:.7em">
+                                <div style="display:flex;flex-wrap:wrap;gap:.7em 1.4em;margin-top:.75em">
                                     <span>孩子签名 <span
                                             style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
                                     <span>爸爸签名 <span
@@ -1979,7 +2550,7 @@
                             成长存款 · 我的记录
                             <small>MY GROWTH DEPOSITS</small>
                         </h2>
-                        <p class="en" style="font-size:.72em;margin:.3em 0 .6em">
+                        <p class="en" style="font-size:.72em;margin:.3em 0 .7em">
                             这里是最重要的地方。每一次认真反思，都会变成一笔实实在在的存款。写得越诚实，存款就越有价值。
                         </p>
 
@@ -1998,6 +2569,15 @@
                             </table>
                         </div>
 
+                        <div class="redeem-ready" id="redeemReady">
+                            <span style="font-size:1.5em">🎉</span>
+                            <div class="txt">
+                                攒满 5 笔啦！<br>
+                                <span style="font-size:.9em;font-weight:400">可以兑换一张奖励券了</span>
+                            </div>
+                            <button class="go-btn" id="goRedeemBtn">去兑换 ✨</button>
+                        </div>
+
                         <div class="rec-bottom">
                             <div class="progress-bar">
                                 <span style="white-space:nowrap">存款进度<br><span
@@ -2013,10 +2593,12 @@
                             </div>
                         </div>
 
-                        <button class="add-btn" id="addRecBtn" style="margin-top:.5em">＋ 新增一笔存款 · Add a deposit</button>
+                        <button class="add-btn" id="addRecBtn" style="margin-top:.55em">＋ 新增一笔存款 · Add a
+                            deposit</button>
                     </div>
                 </div>
 
+                <!-- 兑换历史页（原「兑换记录」+ 弹窗合并） -->
                 <div class="face back">
                     <div class="pg">
                         <div class="part-band">
@@ -2024,28 +2606,27 @@
                             <span class="en2">PART TWO · RECORD</span>
                         </div>
 
-                        <div class="hd" style="margin-bottom:.5em">
+                        <div class="hd" style="margin-bottom:.4em">
                             <span class="dot">11</span>
-                            <h2>兑换记录<small>Redemption Record</small></h2>
+                            <h2>兑换历史<small>Redemption History</small></h2>
                         </div>
 
-                        <div class="redeem-list" id="redeemList"></div>
+                        <p class="en" style="font-size:.72em;margin:.2em 0 .7em">
+                            每一次兑换，都是一次成长的里程碑。点开卡片，可以回顾当时存下的成长记录。
+                        </p>
 
-                        <div class="pager" style="margin-top:.55em">
-                            <button id="redPrev" type="button" title="上一页 / Prev">◀</button>
-                            <span class="page-info" id="redPageInfo">第 1 / 1 页</span>
-                            <button id="redNext" type="button" title="下一页 / Next">▶</button>
+                        <div class="history-list" id="historyList"></div>
+
+                        <div class="pager" id="historyPager" style="margin-top:.6em">
+                            <button id="hisPrev" type="button" title="上一页 / Prev">◀</button>
+                            <span class="page-info" id="hisPageInfo">第 1 / 1 页</span>
+                            <button id="hisNext" type="button" title="下一页 / Next">▶</button>
                         </div>
 
-                        <button class="add-btn" id="addRedeemBtn" style="margin-top:.6em">＋ 新增一次兑换 · Add a
-                            redemption</button>
-
-                        <div class="card tint-b" style="margin-top:.7em;font-size:.72em">
-                            <b>共同约定：</b>一次只能兑换一张奖励券，不能多张叠加；兑换完成后卡片回收作废。
-                            所有券使用前请提前和家长商量好时间。
-                            <div class="en" style="margin-top:.3em">
-                                One coupon at a time. Coupons are collected after use. Plan the time together in
-                                advance.
+                        <div class="card tint-b" style="margin-top:.75em;font-size:.72em">
+                            <b>共同约定：</b>一次只能兑换一张奖励券，不能多张叠加。兑换完成后，本轮存款重新开始计算。
+                            <div class="en" style="margin-top:.35em">
+                                One coupon at a time. After redeeming, a new round begins.
                             </div>
                         </div>
                     </div>
@@ -2062,6 +2643,52 @@
         <button class="btn" id="nextBtn" aria-label="下一页">下一页 ▶</button>
     </div>
     <div class="hint">点击按钮翻页 · 也可以用键盘 ← → 翻页 · Click or use arrow keys</div>
+
+    <!-- ==================== 兑换弹窗 ==================== -->
+    <div class="modal-mask" id="redeemModal">
+        <div class="modal-box">
+            <button class="modal-close" id="redeemClose" aria-label="关闭">✕</button>
+            <h3 class="modal-title">🎁 兑换奖励券</h3>
+            <p class="modal-sub">REDEEM A REWARD</p>
+
+            <div class="redeem-preview">
+                你攒满了 <b>5</b> 笔成长存款！<br>
+                选一张喜欢的奖励券吧 ✨
+            </div>
+
+            <div class="mf">
+                <label>
+                    <span>奖励券 Reward Coupon</span>
+                    <select id="mCoupon"></select>
+                </label>
+                <label>
+                    <span>兑换日期 Date</span>
+                    <input type="date" id="mDate">
+                </label>
+                <label>
+                    <span>孩子签字 Child</span>
+                    <input type="text" id="mChild" placeholder="写下你的名字…" autocomplete="off">
+                </label>
+                <label>
+                    <span>家长签字 Parent</span>
+                    <input type="text" id="mParent" placeholder="爸爸或妈妈签字…" autocomplete="off">
+                </label>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" id="redeemCancel">取消</button>
+                <button class="btn-confirm" id="redeemConfirm" disabled>确认兑换 🎉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 撒花层 + 中央飘字 -->
+    <div id="confettiLayer" aria-hidden="true"></div>
+    <div class="celebrate-toast" id="celebrateToast">
+        <div class="ct-emoji" id="ctEmoji">🏆</div>
+        <div class="ct-text">兑换成功！</div>
+        <div class="ct-sub" id="ctSub">又长大了一点点</div>
+    </div>
 
     <input type="file" id="pigFileInput" accept="image/*" hidden>
 
@@ -2101,13 +2728,14 @@
             nextBtn.addEventListener('click', next);
             prevBtn.addEventListener('click', prev);
             document.addEventListener('keydown', e => {
+                if (e.target.matches('input, textarea, select')) return;
                 if (e.key === 'ArrowRight') next();
                 if (e.key === 'ArrowLeft') prev();
             });
 
             let touchX = null, touchY = null;
             document.addEventListener('touchstart', e => {
-                if (e.touches.length === 1) {
+                if (e.touches.length === 1 && !e.target.closest('.modal-mask, .rec-wrap, .pg')) {
                     touchX = e.touches[0].clientX;
                     touchY = e.touches[0].clientY;
                 }
@@ -2126,7 +2754,7 @@
         })();
 
         /* ============================================================
-           二、封面中间的小猪贴纸：点击更换 + 本地记忆
+           二、封面小猪贴纸
            ============================================================ */
         (function () {
             const KEY = 'passbook-pig-v1';
@@ -2136,10 +2764,7 @@
 
             try {
                 const saved = localStorage.getItem(KEY);
-                if (saved) {
-                    img.src = saved;
-                    img.classList.remove('is-hidden');
-                }
+                if (saved) { img.src = saved; img.classList.remove('is-hidden'); }
             } catch (e) { }
 
             img.addEventListener('error', () => {
@@ -2151,22 +2776,15 @@
                 wrap.classList.remove('is-empty');
             });
 
-            function openPicker() {
-                file.value = '';
-                file.click();
-            }
+            function openPicker() { file.value = ''; file.click(); }
             wrap.addEventListener('click', openPicker);
             wrap.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openPicker();
-                }
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPicker(); }
             });
 
             file.addEventListener('change', e => {
                 const f = e.target.files && e.target.files[0];
                 if (!f || !f.type.startsWith('image/')) return;
-
                 const reader = new FileReader();
                 reader.onload = ev => {
                     img.src = ev.target.result;
@@ -2241,7 +2859,7 @@
         }
 
         /* ============================================================
-           四、奖励券：可编辑 + 可新增 + 保存
+           四、奖励券列表渲染
            ============================================================ */
         (function () {
             const ICONS = ['3.jpg', '4.jpg', '5.jpg', '7.jpg'];
@@ -2388,8 +3006,14 @@
         })();
 
         /* ============================================================
-           五、成长存款记录（每页 5 条）
+           五、成长存款记录
            ============================================================ */
+        const RECORD_KEY = 'passbook-records-v1';
+        const REDEEM_KEY = 'passbook-redeems-v1';
+
+        let records = [];
+        let page = 0;
+
         (function () {
             const body = document.getElementById('recBody');
             const addBtn = document.getElementById('addRecBtn');
@@ -2398,6 +3022,7 @@
             const pagerPrev = document.getElementById('recPrev');
             const pagerNext = document.getElementById('recNext');
             const pagerInfo = document.getElementById('recPageInfo');
+            const readyBar = document.getElementById('redeemReady');
 
             const PER = 5;
 
@@ -2407,11 +3032,30 @@
                 learned: '下次遇到同样的情况，我打算怎么做…\nWhat will I do next time?'
             };
 
-            let records = [];
-            let page = 0;
+            try {
+                const raw = localStorage.getItem(RECORD_KEY);
+                if (raw) {
+                    const saved = JSON.parse(raw);
+                    if (Array.isArray(saved) && saved.length) {
+                        records = saved.map(r => ({
+                            did: r.did || '',
+                            happened: r.happened || '',
+                            learned: r.learned || '',
+                            checked: !!r.checked,
+                            redeemed: !!r.redeemed
+                        }));
+                    }
+                }
+            } catch (e) { }
 
-            for (let i = 0; i < PER; i++) {
-                records.push({ did: '', happened: '', learned: '', checked: false });
+            if (!records.length) {
+                for (let i = 0; i < PER; i++) {
+                    records.push({ did: '', happened: '', learned: '', checked: false, redeemed: false });
+                }
+            }
+
+            function saveRecords() {
+                try { localStorage.setItem(RECORD_KEY, JSON.stringify(records)); } catch (e) { }
             }
 
             function totalPages() {
@@ -2423,17 +3067,27 @@
                 el.style.height = (el.scrollHeight + 2) + 'px';
             }
 
+            function activeTicks() {
+                return records.filter(r => r.checked && !r.redeemed).length;
+            }
+
             function updateProgress() {
-                const ticks = records.filter(r => r.checked).length;
-                const cycles = Math.floor(ticks / 5);
+                const ticks = activeTicks();
                 const cur = ticks % 5;
+                const cycles = Math.floor(ticks / 5);
 
                 barFill.style.width = ((ticks > 0 && cur === 0) ? 100 : (cur / 5 * 100)) + '%';
 
-                if (cycles > 0) {
+                if (cycles >= 1) {
                     barText.textContent = '已存 ' + ticks + ' 笔 · 可兑换 ' + cycles + ' 次';
                 } else {
                     barText.textContent = '已存 ' + ticks + ' 笔 · 本轮 ' + cur + '/5';
+                }
+
+                if (ticks >= 5) {
+                    readyBar.classList.add('show');
+                } else {
+                    readyBar.classList.remove('show');
                 }
             }
 
@@ -2448,7 +3102,7 @@
                 }
 
                 if (end === start) {
-                    body.appendChild(makeRow({ did: '', happened: '', learned: '', checked: false }, start, 1));
+                    body.appendChild(makeRow({ did: '', happened: '', learned: '', checked: false, redeemed: false }, start, 1));
                 }
 
                 pagerInfo.textContent = '第 ' + (page + 1) + ' / ' + totalPages() + ' 页';
@@ -2464,24 +3118,28 @@
 
             function makeRow(rec, gIdx, dispIdx) {
                 const tr = document.createElement('tr');
+                if (rec.redeemed) tr.classList.add('redeemed-row');
 
                 const idx = document.createElement('td');
                 idx.className = 'idx';
                 idx.appendChild(document.createTextNode(String(dispIdx)));
 
-                const del = document.createElement('button');
-                del.type = 'button';
-                del.className = 'row-del';
-                del.textContent = '×';
-                del.title = '删除这一笔 / Delete';
-                del.addEventListener('click', () => {
-                    if (records.length <= 1) return;
-                    records.splice(gIdx, 1);
-                    const tp = totalPages();
-                    if (page >= tp) page = tp - 1;
-                    renderPage();
-                });
-                idx.appendChild(del);
+                if (!rec.redeemed) {
+                    const del = document.createElement('button');
+                    del.type = 'button';
+                    del.className = 'row-del';
+                    del.textContent = '×';
+                    del.title = '删除这一笔 / Delete';
+                    del.addEventListener('click', () => {
+                        if (records.length <= 1) return;
+                        records.splice(gIdx, 1);
+                        const tp = totalPages();
+                        if (page >= tp) page = tp - 1;
+                        saveRecords();
+                        renderPage();
+                    });
+                    idx.appendChild(del);
+                }
 
                 const fields = ['did', 'happened', 'learned'];
                 const tds = fields.map(f => {
@@ -2490,9 +3148,11 @@
                     ta.rows = 1;
                     ta.value = rec[f] || '';
                     ta.placeholder = PH[f];
+                    if (rec.redeemed) ta.disabled = true;
                     ta.addEventListener('input', () => {
                         rec[f] = ta.value;
                         autoGrow(ta);
+                        saveRecords();
                     });
                     td.appendChild(ta);
                     return td;
@@ -2502,14 +3162,19 @@
                 boxTd.className = 'box';
                 const tick = document.createElement('button');
                 tick.type = 'button';
-                tick.className = 'tick' + (rec.checked ? ' on' : '');
+                tick.className = 'tick' + (rec.checked ? ' on' : '') + (rec.redeemed ? ' redeemed' : '');
                 tick.textContent = '✓';
                 tick.setAttribute('aria-label', '存入 / Deposit');
-                tick.addEventListener('click', () => {
-                    rec.checked = !rec.checked;
-                    tick.classList.toggle('on', rec.checked);
-                    updateProgress();
-                });
+                if (rec.redeemed) {
+                    tick.title = '已兑换 / Redeemed';
+                } else {
+                    tick.addEventListener('click', () => {
+                        rec.checked = !rec.checked;
+                        tick.classList.toggle('on', rec.checked);
+                        saveRecords();
+                        updateProgress();
+                    });
+                }
                 boxTd.appendChild(tick);
 
                 tr.append(idx, ...tds, boxTd);
@@ -2517,9 +3182,10 @@
             }
 
             addBtn.addEventListener('click', () => {
-                records.push({ did: '', happened: '', learned: '', checked: false });
+                records.push({ did: '', happened: '', learned: '', checked: false, redeemed: false });
                 const newIdx = records.length - 1;
                 page = Math.floor(newIdx / PER);
+                saveRecords();
                 renderPage();
 
                 requestAnimationFrame(() => {
@@ -2541,165 +3207,384 @@
                 if (page < totalPages() - 1) { page++; renderPage(); }
             });
 
+            window.__records = {
+                get: () => records,
+                save: saveRecords,
+                renderPage,
+                updateProgress,
+                // 标记 5 条为已兑换，并返回这 5 条的快照
+                markRedeemedAndSnapshot: () => {
+                    const active = records.filter(r => r.checked && !r.redeemed);
+                    const targets = active.slice(0, 5);
+
+                    const snapshot = targets.map(r => ({
+                        did: r.did || '',
+                        happened: r.happened || '',
+                        learned: r.learned || ''
+                    }));
+
+                    targets.forEach(r => { r.redeemed = true; });
+                    saveRecords();
+                    renderPage();
+
+                    return snapshot;
+                },
+                hasFiveActive: () => activeTicks() >= 5
+            };
+
             renderPage();
         })();
 
         /* ============================================================
-           六、兑换记录（每页 5 条）
+           六、兑换历史（右侧页面）
            ============================================================ */
+        const HISTORY_PAGE_SIZE = 3;   // 每页 3 条（因为每条可以展开，占空间较大）
+        let redeems = [];
+        let historyPage = 0;
+
         (function () {
-            const list = document.getElementById('redeemList');
-            const addBtn = document.getElementById('addRedeemBtn');
-            const pagerPrev = document.getElementById('redPrev');
-            const pagerNext = document.getElementById('redNext');
-            const pagerInfo = document.getElementById('redPageInfo');
+            const list = document.getElementById('historyList');
+            const pagerPrev = document.getElementById('hisPrev');
+            const pagerNext = document.getElementById('hisNext');
+            const pagerInfo = document.getElementById('hisPageInfo');
+            const pagerBox = document.getElementById('historyPager');
 
-            const PER = 5;
+            // 读取本地
+            try {
+                const raw = localStorage.getItem(REDEEM_KEY);
+                if (raw) {
+                    const saved = JSON.parse(raw);
+                    if (Array.isArray(saved)) {
+                        redeems = saved.map(r => ({
+                            date: r.date || '',
+                            coupon: r.coupon || '',
+                            child: r.child || '',
+                            parent: r.parent || '',
+                            records: Array.isArray(r.records) ? r.records : []
+                        }));
+                    }
+                }
+            } catch (e) { }
 
-            let redeems = [];
-            let page = 0;
+            function saveRedeems() {
+                try { localStorage.setItem(REDEEM_KEY, JSON.stringify(redeems)); } catch (e) { }
+            }
 
-            for (let i = 0; i < PER; i++) {
-                redeems.push({ date: '', coupon: '', child: '', parent: '' });
+            function realRedeems() {
+                return redeems.filter(r => r.date || r.coupon || r.child || r.parent);
             }
 
             function totalPages() {
-                return Math.max(1, Math.ceil(redeems.length / PER));
-            }
-
-            function buildOptions(sel, keepValue) {
-                const names = getAllCouponNames();
-                sel.innerHTML = '';
-                const o0 = document.createElement('option');
-                o0.value = ''; o0.textContent = '— 请选择 —';
-                sel.appendChild(o0);
-                names.forEach(n => {
-                    const o = document.createElement('option');
-                    o.value = n; o.textContent = n;
-                    sel.appendChild(o);
-                });
-                if (keepValue && names.indexOf(keepValue) !== -1) {
-                    sel.value = keepValue;
-                } else {
-                    sel.value = '';
-                }
+                return Math.max(1, Math.ceil(realRedeems().length / HISTORY_PAGE_SIZE));
             }
 
             function renderPage() {
+                const all = realRedeems();
+                // 倒序，最新的在上
+                const sorted = all.slice().reverse();
+
                 list.innerHTML = '';
 
-                const start = page * PER;
-                const end = Math.min(redeems.length, start + PER);
+                if (!sorted.length) {
+                    pagerBox.style.display = 'none';
+                    list.innerHTML = `
+        <div class="history-empty">
+          <span class="big">📭</span>
+          还没有兑换记录哦<br>
+          攒满 5 笔成长存款，就能兑换第一张奖励券啦！
+        </div>
+      `;
+                    return;
+                }
+                pagerBox.style.display = 'flex';
 
+                const tp = totalPages();
+                if (historyPage >= tp) historyPage = tp - 1;
+                if (historyPage < 0) historyPage = 0;
+
+                const start = historyPage * HISTORY_PAGE_SIZE;
+                const end = Math.min(sorted.length, start + HISTORY_PAGE_SIZE);
+
+                // 全局序号（从最早开始数）：第 1 次是最早兑换的
                 for (let i = start; i < end; i++) {
-                    list.appendChild(makeCard(redeems[i], i, i - start + 1));
+                    const globalIdx = sorted.length - i;   // 递减
+                    list.appendChild(makeCard(sorted[i], globalIdx));
                 }
 
-                if (end === start) {
-                    list.appendChild(makeCard({ date: '', coupon: '', child: '', parent: '' }, start, 1));
-                }
-
-                pagerInfo.textContent = '第 ' + (page + 1) + ' / ' + totalPages() + ' 页';
-                pagerPrev.disabled = (page === 0);
-                pagerNext.disabled = (page >= totalPages() - 1);
+                pagerInfo.textContent = '第 ' + (historyPage + 1) + ' / ' + tp + ' 页';
+                pagerPrev.disabled = (historyPage === 0);
+                pagerNext.disabled = (historyPage >= tp - 1);
             }
 
-            function makeCard(r, gIdx, dispIdx) {
+            function makeCard(r, globalIdx) {
                 const card = document.createElement('div');
-                card.className = 'redeem-card';
+                card.className = 'history-card';
 
-                const head = document.createElement('div');
-                head.className = 'rc-head';
+                // 头部
+                const header = document.createElement('div');
+                header.className = 'hc-header';
+
                 const num = document.createElement('span');
-                num.className = 'rc-num';
-                num.textContent = '兑换 #' + dispIdx;
+                num.className = 'hc-num';
+                num.textContent = '第 ' + globalIdx + ' 次';
 
-                const del = document.createElement('button');
-                del.type = 'button';
-                del.className = 'rc-del';
-                del.textContent = '×';
-                del.title = '删除这条记录 / Delete';
-                del.addEventListener('click', () => {
-                    if (redeems.length <= 1) return;
-                    redeems.splice(gIdx, 1);
-                    const tp = totalPages();
-                    if (page >= tp) page = tp - 1;
-                    renderPage();
+                const date = document.createElement('span');
+                date.className = 'hc-date';
+                date.textContent = r.date || '未填写日期';
+
+                const arrow = document.createElement('span');
+                arrow.className = 'hc-arrow';
+                arrow.textContent = '▼';
+
+                header.append(num, date, arrow);
+                card.appendChild(header);
+
+                // 奖励券
+                const coupon = document.createElement('div');
+                coupon.className = 'hc-coupon';
+                coupon.textContent = '🎁 ' + (r.coupon || '未选择奖励券');
+                card.appendChild(coupon);
+
+                // 签字
+                const signs = document.createElement('div');
+                signs.className = 'hc-signs';
+                if (r.child) signs.innerHTML += '<span>孩子：' + r.child + '</span>';
+                if (r.parent) signs.innerHTML += '<span>家长：' + r.parent + '</span>';
+                if (!r.child && !r.parent) signs.innerHTML = '<span>（未签字）</span>';
+                card.appendChild(signs);
+
+                // 折叠提示
+                const hint = document.createElement('div');
+                hint.className = 'hc-toggle-hint';
+                const recCount = (r.records && r.records.length) ? r.records.length : 0;
+                hint.textContent = recCount
+                    ? '📖 查看对应的 ' + recCount + ' 条成长记录'
+                    : '📖 这次兑换没有保存成长记录';
+                card.appendChild(hint);
+
+                // 折叠内容
+                const recordsBox = document.createElement('div');
+                recordsBox.className = 'hc-records';
+
+                if (recCount) {
+                    const title = document.createElement('div');
+                    title.className = 'hc-records-title';
+                    title.textContent = '💡 这次兑换，是因为反思了这 ' + recCount + ' 件事：';
+                    recordsBox.appendChild(title);
+
+                    r.records.forEach((rec, i) => {
+                        const item = document.createElement('div');
+                        item.className = 'hc-record';
+
+                        const idxSpan = document.createElement('span');
+                        idxSpan.className = 'hr-idx';
+                        idxSpan.textContent = String(i + 1);
+
+                        const body = document.createElement('div');
+                        body.className = 'hr-body';
+
+                        const l1 = document.createElement('div');
+                        l1.className = 'hr-line' + (rec.did ? '' : ' empty');
+                        l1.innerHTML = '<b>我做了什么：</b>' + (rec.did || '（未填写）');
+
+                        const l2 = document.createElement('div');
+                        l2.className = 'hr-line' + (rec.happened ? '' : ' empty');
+                        l2.innerHTML = '<b>发生了什么：</b>' + (rec.happened || '（未填写）');
+
+                        const l3 = document.createElement('div');
+                        l3.className = 'hr-line' + (rec.learned ? '' : ' empty');
+                        l3.innerHTML = '<b>我学到了：</b>' + (rec.learned || '（未填写）');
+
+                        body.append(l1, l2, l3);
+                        item.append(idxSpan, body);
+                        recordsBox.appendChild(item);
+                    });
+                } else {
+                    const empty = document.createElement('div');
+                    empty.className = 'hc-record';
+                    empty.style.color = '#b9cbd8';
+                    empty.style.fontStyle = 'italic';
+                    empty.textContent = '（这条兑换记录来自早期版本，没有保存对应的成长记录）';
+                    recordsBox.appendChild(empty);
+                }
+
+                card.appendChild(recordsBox);
+
+                // 点击展开/收起
+                card.addEventListener('click', (e) => {
+                    // 如果点到了内部链接或按钮就不触发（现在没有，但保留）
+                    if (e.target.closest('button, a')) return;
+                    card.classList.toggle('expanded');
                 });
-                head.append(num, del);
 
-                const grid = document.createElement('div');
-                grid.className = 'rc-grid';
-
-                const l1 = document.createElement('label');
-                l1.innerHTML = '<span>兑换日期</span>';
-                const d = document.createElement('input');
-                d.type = 'date';
-                d.value = r.date || '';
-                d.addEventListener('change', () => r.date = d.value);
-                l1.appendChild(d);
-
-                const l2 = document.createElement('label');
-                l2.innerHTML = '<span>奖励券</span>';
-                const sel = document.createElement('select');
-                buildOptions(sel, r.coupon);
-                sel.addEventListener('change', () => r.coupon = sel.value);
-                l2.appendChild(sel);
-
-                const l3 = document.createElement('label');
-                l3.innerHTML = '<span>孩子签字</span>';
-                const s1 = document.createElement('input');
-                s1.type = 'text'; s1.placeholder = 'Child';
-                s1.value = r.child || '';
-                s1.addEventListener('input', () => r.child = s1.value);
-                l3.appendChild(s1);
-
-                const l4 = document.createElement('label');
-                l4.innerHTML = '<span>家长签字</span>';
-                const s2 = document.createElement('input');
-                s2.type = 'text'; s2.placeholder = 'Parent';
-                s2.value = r.parent || '';
-                s2.addEventListener('input', () => r.parent = s2.value);
-                l4.appendChild(s2);
-
-                grid.append(l1, l2, l3, l4);
-                card.append(head, grid);
                 return card;
             }
 
-            window.addEventListener('couponsUpdated', () => {
-                list.querySelectorAll('select').forEach(sel => {
-                    const cur = sel.value;
-                    buildOptions(sel, cur);
-                });
-            });
-
-            addBtn.addEventListener('click', () => {
-                redeems.push({ date: '', coupon: '', child: '', parent: '' });
-                const newIdx = redeems.length - 1;
-                page = Math.floor(newIdx / PER);
-                renderPage();
-
-                requestAnimationFrame(() => {
-                    const localIdx = newIdx % PER;
-                    const card = list.children[localIdx];
-                    if (card) {
-                        const sel = card.querySelector('select');
-                        if (sel) sel.focus();
-                        card.scrollIntoView({ block: 'nearest' });
-                    }
-                });
-            });
-
             pagerPrev.addEventListener('click', () => {
-                if (page > 0) { page--; renderPage(); }
+                if (historyPage > 0) { historyPage--; renderPage(); }
             });
             pagerNext.addEventListener('click', () => {
-                if (page < totalPages() - 1) { page++; renderPage(); }
+                if (historyPage < totalPages() - 1) { historyPage++; renderPage(); }
             });
+
+            window.__redeems = {
+                get: () => redeems,
+                save: saveRedeems,
+                addFromModal: (data) => {
+                    redeems.push({
+                        date: data.date,
+                        coupon: data.coupon,
+                        child: data.child,
+                        parent: data.parent,
+                        records: data.records || []
+                    });
+                    saveRedeems();
+                    historyPage = 0;   // 回到第一页（最新的在上面）
+                    renderPage();
+                },
+                getAll: () => realRedeems(),
+                refresh: renderPage
+            };
 
             renderPage();
         })();
+
+        /* ============================================================
+           七、兑换弹窗
+           ============================================================ */
+        (function () {
+            const modal = document.getElementById('redeemModal');
+            const closeBtn = document.getElementById('redeemClose');
+            const cancelBtn = document.getElementById('redeemCancel');
+            const confirmBtn = document.getElementById('redeemConfirm');
+            const selCoupon = document.getElementById('mCoupon');
+            const inDate = document.getElementById('mDate');
+            const inChild = document.getElementById('mChild');
+            const inParent = document.getElementById('mParent');
+
+            function buildOptions() {
+                const names = getAllCouponNames();
+                selCoupon.innerHTML = '';
+                const o0 = document.createElement('option');
+                o0.value = ''; o0.textContent = '— 请选择 —';
+                selCoupon.appendChild(o0);
+                names.forEach(n => {
+                    const o = document.createElement('option');
+                    o.value = n; o.textContent = n;
+                    selCoupon.appendChild(o);
+                });
+            }
+
+            function checkValid() {
+                confirmBtn.disabled = !(selCoupon.value && inDate.value);
+            }
+
+            function open() {
+                if (!inDate.value) {
+                    const t = new Date();
+                    const y = t.getFullYear();
+                    const m = String(t.getMonth() + 1).padStart(2, '0');
+                    const d = String(t.getDate()).padStart(2, '0');
+                    inDate.value = y + '-' + m + '-' + d;
+                }
+                buildOptions();
+                checkValid();
+                modal.classList.add('show');
+            }
+
+            function close() {
+                modal.classList.remove('show');
+            }
+
+            document.getElementById('goRedeemBtn').addEventListener('click', open);
+            closeBtn.addEventListener('click', close);
+            cancelBtn.addEventListener('click', close);
+            modal.addEventListener('click', e => {
+                if (e.target === modal) close();
+            });
+
+            selCoupon.addEventListener('change', checkValid);
+            inDate.addEventListener('change', checkValid);
+
+            confirmBtn.addEventListener('click', () => {
+                if (confirmBtn.disabled) return;
+
+                // 1. 从成长存款里取出这 5 条记录的文本快照，并标记为已兑换
+                const snapshot = window.__records.markRedeemedAndSnapshot();
+
+                // 2. 把兑换记录（含成长快照）保存到兑换历史
+                window.__redeems.addFromModal({
+                    date: inDate.value,
+                    coupon: selCoupon.value,
+                    child: inChild.value.trim(),
+                    parent: inParent.value.trim(),
+                    records: snapshot
+                });
+
+                // 3. 刷新兑换历史页面
+                window.__redeems.refresh();
+
+                // 4. 关闭弹窗
+                close();
+
+                // 5. 清空表单
+                selCoupon.value = '';
+                inChild.value = '';
+                inParent.value = '';
+                confirmBtn.disabled = true;
+
+                // 6. 撒花庆祝
+                celebrate();
+            });
+
+            window.addEventListener('couponsUpdated', () => {
+                if (modal.classList.contains('show')) buildOptions();
+            });
+        })();
+
+        /* ============================================================
+           八、撒花庆祝
+           ============================================================ */
+        function celebrate() {
+            const layer = document.getElementById('confettiLayer');
+            const toast = document.getElementById('celebrateToast');
+
+            const EMOJIS = ['⭐', '⚡', '🚀', '💎', '🏆', '🎯', '✨', '🌟', '🥇', '🎖️'];
+
+            layer.innerHTML = '';
+
+            const count = 60;
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('span');
+                el.className = 'confetti-piece';
+                el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+
+                el.style.left = (Math.random() * 100) + 'vw';
+
+                const size = 18 + Math.random() * 22;
+                el.style.fontSize = size + 'px';
+
+                const duration = 1.8 + Math.random() * 1.6;
+                el.style.animationDuration = duration + 's';
+
+                el.style.animationDelay = (Math.random() * 0.6) + 's';
+
+                el.style.setProperty('--spin', (360 + Math.random() * 720) + 'deg');
+
+                layer.appendChild(el);
+            }
+
+            toast.classList.remove('show', 'fade-out');
+            void toast.offsetWidth;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => toast.classList.remove('show', 'fade-out'), 500);
+            }, 2200);
+
+            setTimeout(() => { layer.innerHTML = ''; }, 3600);
+        }
     </script>
 </body>
 
