@@ -1822,33 +1822,34 @@
             }
         }
 
-        /* ===== 响应式：手机端修复 —— 绕中心旋转 + 关闭透视 + 隐藏书脊阴影 + 按钮吸底 ===== */
+        /* ============ 手机端 ============ */
         @media (max-width:760px) {
 
             html,
             body {
                 height: 100%;
-                overflow: hidden
+                height: 100dvh;
+                overflow: hidden;
             }
 
             body {
                 padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
                 gap: 8px;
-                justify-content: center;
-                height: 100vh;
+                justify-content: flex-start;
                 height: 100dvh;
                 box-sizing: border-box;
                 overflow: hidden;
             }
 
-            /* 关键1：恢复 3D 透视，透视点在左侧（书的中缝位置） */
+            /* 书页：占满可用空间，绕左边缘翻页 */
             .stage {
-                width: min(94vw, calc((100dvh - 130px) * 0.58));
-                aspect-ratio: 0.58 / 1;
-                max-height: calc(100dvh - 130px);
+                width: min(94vw, calc((100dvh - 120px) * 0.62));
+                aspect-ratio: 0.62 / 1;
+                max-height: calc(100dvh - 120px);
                 flex-shrink: 0;
                 perspective: 1800px;
                 perspective-origin: 0% 50%;
+                margin: 0 auto;
             }
 
             .book {
@@ -1856,7 +1857,6 @@
                 width: 100%
             }
 
-            /* 关键2：绕左边缘旋转，翻过去的页会真正翻走 */
             .leaf {
                 left: 0;
                 width: 100%;
@@ -1864,14 +1864,16 @@
                 transform-origin: left center;
             }
 
-            /* 关键3：隐藏书脊阴影，防止遮住左侧内容 */
-            .face::after {
-                display: none;
+            .face {
+                border-radius: 14px
             }
 
-            .face,
             .face.back {
-                border-radius: 16px
+                border-radius: 14px
+            }
+
+            .face::after {
+                display: none
             }
 
             .backdrop.left {
@@ -1881,165 +1883,317 @@
             .backdrop.right {
                 left: 0;
                 width: 100%;
-                border-radius: 16px
+                border-radius: 14px
             }
 
             .spine {
                 display: none
             }
 
+            /* 内容区：可滚动 + 明显滚动条 + 底部留白 */
             .pg {
-                font-size: clamp(11px, 3.05cqw, 14px);
-                padding: 4% 5% 7%;
-                line-height: 1.5;
+                font-size: clamp(11px, 3.2cqw, 14px);
+                padding: 5% 5.5% 12%;
+                line-height: 1.55;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .pg::-webkit-scrollbar {
-                width: 4px
+                width: 5px
+            }
+
+            .pg::-webkit-scrollbar-track {
+                background: transparent
             }
 
             .pg::-webkit-scrollbar-thumb {
-                background: #8fc9ec;
-                border-radius: 4px
+                background: rgba(74, 168, 224, .55);
+                border-radius: 5px;
             }
 
-            /* 关键4：新增按钮吸底，永远能点到 */
+            .pg.fixed {
+                overflow: hidden
+            }
+
+            /* 所有页面：紧凑排版 */
+            .hd {
+                margin-bottom: .6em
+            }
+
+            .hd h2 {
+                font-size: 1.35em
+            }
+
+            .card {
+                padding: .65em .8em;
+                margin-bottom: .55em
+            }
+
+            .rule {
+                margin-bottom: .6em
+            }
+
+            table {
+                font-size: .76em
+            }
+
+            th,
+            td {
+                padding: .4em .45em
+            }
+
+            /* 奖励券：紧凑一点 */
+            .coupon {
+                padding: .45em .6em;
+                margin-bottom: .45em
+            }
+
+            .coupon .c-ic {
+                width: 2.1em;
+                height: 2.1em
+            }
+
+            .coupon .c-t {
+                font-size: .84em
+            }
+
+            .coupon .c-s {
+                font-size: .62em
+            }
+
+            /* 新增按钮：吸在底部，永远能点到 */
             .add-btn {
                 position: sticky;
                 bottom: 0;
-                z-index: 20;
-                box-shadow: 0 -6px 12px rgba(255, 255, 255, .95), 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
+                z-index: 30;
+                margin-top: auto;
+                padding-top: .5em;
+                margin-bottom: 0;
             }
 
-            .pg.fixed .add-btn {
-                position: static;
+            .add-btn.small {
+                box-shadow: 0 -8px 16px rgba(255, 255, 255, .98), 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
             }
 
+            /* 成长记录页的底部分页区 */
+            .rec-bottom {
+                gap: .4em;
+                margin-top: .5em;
+                flex-shrink: 0;
+            }
+
+            .rec-bottom .progress-bar {
+                flex: 1 1 100%;
+                font-size: .68em
+            }
+
+            .rec-wrap {
+                font-size: .72em
+            }
+
+            /* 封面 */
             .cover {
-                font-size: clamp(11px, 3.05cqw, 14px)
-            }
-
-            .end-page {
-                font-size: clamp(11px, 3.05cqw, 14px)
-            }
-
-            .btn {
-                padding: .5em 1em;
-                font-size: .85em
-            }
-
-            .counter {
-                min-width: 58px;
-                font-size: .74em;
-                padding: .42em .68em
+                font-size: clamp(11px, 3.2cqw, 14px)
             }
 
             .cover-inner {
-                max-width: 94%;
+                max-width: 92%;
                 padding: 5% 5%
             }
 
             .pig-wrap {
-                width: 4.4em;
-                height: 4.4em
+                width: 4.2em;
+                height: 4.2em
             }
 
             .cover h1 {
-                font-size: 1.45em
+                font-size: 1.4em
+            }
+
+            .cover .en-title {
+                font-size: .62em;
+                letter-spacing: .22em
+            }
+
+            .cover .motto {
+                font-size: .86em
+            }
+
+            .cover .motto-en {
+                font-size: .6em
             }
 
             .cover .fields {
                 gap: 1em;
-                font-size: .7em
+                font-size: .66em;
+                margin-top: .9em
             }
 
             .cover .field-input {
-                width: 4.8em
+                width: 4.6em
             }
 
-            .rec-bottom {
-                gap: .5em
-            }
-
-            .rec-bottom .progress-bar {
-                flex: 1 1 100%
+            /* 封底 */
+            .end-page {
+                font-size: clamp(11px, 3.2cqw, 14px);
+                padding: 8% 8%
             }
 
             .end-title {
                 font-size: 1.5em
             }
 
+            .end-sub {
+                font-size: .6em;
+                letter-spacing: .32em
+            }
+
             .end-line {
-                font-size: .88em
+                font-size: .86em
+            }
+
+            .end-line-en {
+                font-size: .64em
+            }
+
+            .end-badges {
+                gap: .4em;
+                margin: .2em 0 .7em
+            }
+
+            .end-badges .badge {
+                font-size: .64em;
+                padding: .28em .75em
             }
 
             .end-thanks {
-                font-size: .9em
+                font-size: .95em
+            }
+
+            .end-thanks-en {
+                font-size: .62em
+            }
+
+            /* 底部控制条 */
+            .controls {
+                position: sticky;
+                bottom: 0;
+                z-index: 100;
+                gap: 10px;
+                padding-top: 6px;
+                background: linear-gradient(180deg, rgba(247, 253, 243, 0) 0%, rgba(247, 253, 243, .9) 40%, rgba(247, 253, 243, .98) 100%);
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn {
+                padding: .5em 1em;
+                font-size: .82em
+            }
+
+            .counter {
+                min-width: 52px;
+                font-size: .72em;
+                padding: .4em .65em
             }
 
             .hint {
                 display: none
             }
 
+            /* 弹窗 */
             .modal-box {
                 width: 94vw;
-                padding: 1.2em 1.1em 1em
+                padding: 1.2em 1.1em 1em;
+                max-height: 90vh
             }
 
             .modal-title {
                 font-size: 1.15em
             }
 
+            .modal-sub {
+                font-size: .62em
+            }
+
+            /* 撒花提示 */
             .celebrate-toast .ct-emoji {
                 font-size: 3.2em
             }
 
             .celebrate-toast .ct-text {
-                font-size: 1.2em
+                font-size: 1.15em
             }
 
+            .celebrate-toast .ct-sub {
+                font-size: .75em
+            }
+
+            /* 兑换历史卡片 */
             .hc-record {
                 font-size: .66em
+            }
+
+            .hc-coupon {
+                font-size: .84em
+            }
+
+            .hc-num {
+                font-size: .62em
+            }
+
+            .hc-date {
+                font-size: .62em
+            }
+
+            .hc-signs {
+                font-size: .62em
+            }
+
+            .hc-toggle-hint {
+                font-size: .6em
             }
         }
 
         @media (max-width:420px) {
             .hd h2 {
-                font-size: 1.26em
-            }
-
-            .coupon {
-                padding: .4em .55em
+                font-size: 1.2em
             }
 
             .coupon .c-ic {
-                width: 2em;
-                height: 2em
+                width: 1.9em;
+                height: 1.9em
             }
 
             .rec {
-                font-size: .66em
+                font-size: .62em
             }
 
             .rec textarea {
-                min-height: 2.8em
+                min-height: 2.6em;
+                font-size: .95em
             }
 
             .pg {
                 font-size: 11px
             }
 
-            .redeem-ready .txt {
-                font-size: .76em
-            }
-
-            .redeem-ready .go-btn {
-                font-size: .72em;
-                padding: .45em .9em
-            }
-
             .example-block .ex-row {
-                font-size: .76em
+                font-size: .74em
+            }
+
+            .cover h1 {
+                font-size: 1.28em
+            }
+
+            .end-title {
+                font-size: 1.35em
+            }
+
+            .btn {
+                padding: .45em .85em;
+                font-size: .78em
             }
         }
     </style>
@@ -2060,6 +2214,7 @@
 
             <div class="backdrop left" aria-hidden="true"></div>
 
+            <!-- 封底 -->
             <div class="backdrop right">
                 <div class="end-page">
                     <h2 class="end-title">存折封底</h2>
@@ -2077,7 +2232,7 @@
                 </div>
             </div>
 
-            <!-- 第 0 张纸：封面 + 目录 -->
+            <!-- ===== 第 0 张纸：封面 + 目录 ===== -->
             <div class="leaf">
                 <div class="face front">
                     <div class="cover">
@@ -2146,12 +2301,12 @@
                                 <div class="en">Reward Coupons</div>
                             </div>
                         </div>
-                        <div style="margin-top:auto;text-align:center;font-size:2.4em;opacity:.55">🐷💙</div>
+                        <div style="margin-top:auto;text-align:center;font-size:2.2em;opacity:.55">🐷💙</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 第 1 张纸：怎么玩 + 怎么写 -->
+            <!-- ===== 第 1 张纸：怎么玩 + 怎么写 ===== -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2315,7 +2470,7 @@
                 </div>
             </div>
 
-            <!-- 第 2 张纸：家庭公约 + 奖励券① -->
+            <!-- ===== 第 2 张纸：家庭公约 + 奖励券① ===== -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2369,7 +2524,7 @@
                 </div>
             </div>
 
-            <!-- 第 3 张纸：奖励券② + 奖励券③ -->
+            <!-- ===== 第 3 张纸：奖励券② + 奖励券③ ===== -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2391,7 +2546,7 @@
                 </div>
             </div>
 
-            <!-- 第 4 张纸：成长记录 + 兑换历史 -->
+            <!-- ===== 第 4 张纸：成长记录 + 兑换历史 ===== -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg fixed" style="padding-bottom:4%">
@@ -2418,7 +2573,7 @@
                             </table>
                         </div>
                         <div class="redeem-ready" id="redeemReady">
-                            <span style="font-size:1.5em">🎉</span>
+                            <span style="font-size:1.4em">🎉</span>
                             <div class="txt">攒满 5 笔啦！<br><span style="font-size:.9em;font-weight:400">可以兑换一张奖励券了</span>
                             </div>
                             <button class="go-btn" id="goRedeemBtn">去兑换 ✨</button>
