@@ -1366,6 +1366,69 @@
         }
 
         .cover .field-input::placeholder {
+
+            /* 封面日期输入框：显示完整 */
+            .cover .field-input[type="date"] {
+                width: 8em;
+                font-size: .95em;
+                color: var(--blue-deep);
+                text-align: center;
+            }
+
+            /* 手机端封面日期适当缩窄 */
+            @media (max-width:760px) {
+                .cover .field-input[type="date"] {
+                    width: 7em;
+                    font-size: .9em;
+                }
+            }
+
+            /* 家庭公约签名区 */
+            .promise-fields {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: .75em 1.2em;
+                margin-top: .85em;
+            }
+
+            .promise-item {
+                display: flex;
+                flex-direction: column;
+                gap: .28em;
+                font-size: 1em;
+                color: var(--ink-soft);
+                min-width: 0;
+            }
+
+            .promise-item span {
+                font-size: .85em;
+                white-space: nowrap;
+            }
+
+            .promise-item input {
+                font-family: inherit;
+                font-size: .95em;
+                color: var(--blue-deep);
+                background: transparent;
+                border: none;
+                border-bottom: 2px dotted #a8cee4;
+                padding: .2em .15em .35em;
+                outline: none;
+                width: 100%;
+                transition: border-color .18s, background .18s;
+                border-radius: 0;
+            }
+
+            .promise-item input:focus {
+                border-bottom-color: var(--blue);
+                background: rgba(255, 255, 255, .65);
+            }
+
+            .promise-item input::placeholder {
+                color: #c3d9e8;
+                font-size: .85em;
+            }
+
             color: #c3d9e8;
             font-size: .9em
         }
@@ -2297,7 +2360,7 @@
                                 </label>
                                 <label class="field-item">
                                     <span class="field-label">开户日期</span>
-                                    <input class="field-input" type="text" placeholder="年 / 月 / 日" autocomplete="off">
+                                    <input class="field-input" type="date">
                                 </label>
                             </div>
                         </div>
@@ -2538,15 +2601,23 @@
                         <div class="card tint-b" style="margin-top:auto">
                             <div style="font-size:.82em">
                                 <b>我们一起约定 · Our Promise</b>
-                                <div style="display:flex;flex-wrap:wrap;gap:.7em 1.4em;margin-top:.75em">
-                                    <span>孩子签名 <span
-                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
-                                    <span>爸爸签名 <span
-                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
-                                    <span>妈妈签名 <span
-                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
-                                    <span>约定日期 <span
-                                            style="display:inline-block;width:5em;border-bottom:2px dotted #a8cee4"></span></span>
+                                <div class="promise-fields">
+                                    <label class="promise-item">
+                                        <span>孩子签名</span>
+                                        <input type="text" placeholder="写名字…" autocomplete="off">
+                                    </label>
+                                    <label class="promise-item">
+                                        <span>爸爸签名</span>
+                                        <input type="text" placeholder="写名字…" autocomplete="off">
+                                    </label>
+                                    <label class="promise-item">
+                                        <span>妈妈签名</span>
+                                        <input type="text" placeholder="写名字…" autocomplete="off">
+                                    </label>
+                                    <label class="promise-item">
+                                        <span>约定日期</span>
+                                        <input type="date">
+                                    </label>
                                 </div>
                             </div>
                         </div>
