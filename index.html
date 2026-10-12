@@ -400,7 +400,6 @@
             border-bottom: none
         }
 
-        /* 范例 —— 只放 1 个例子（吃饭磨蹭） */
         .example-block {
             background: linear-gradient(120deg, #fff8e1, #fff3c4);
             border: 2px dashed #ffd98a;
@@ -435,7 +434,7 @@
         .example-block .ex-tag {
             font-weight: 700;
             color: var(--blue-deep);
-            white-space: nowrap;
+            white-space: nowrap
         }
 
         .example-block .ex-text {
@@ -1823,7 +1822,7 @@
             }
         }
 
-        /* ===== 响应式：电脑端左右两页，手机端单页 + 垂直居中 ===== */
+        /* ===== 响应式：手机端修复 —— 绕中心旋转 + 关闭透视 + 隐藏书脊阴影 + 按钮吸底 ===== */
         @media (max-width:760px) {
 
             html,
@@ -1833,8 +1832,8 @@
             }
 
             body {
-                padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
-                gap: 10px;
+                padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+                gap: 8px;
                 justify-content: center;
                 height: 100vh;
                 height: 100dvh;
@@ -1843,12 +1842,11 @@
             }
 
             .stage {
-                width: min(94vw, calc((100dvh - 150px) * 0.6));
-                aspect-ratio: 0.6 / 1;
-                max-width: 100%;
+                width: min(94vw, calc((100dvh - 130px) * 0.58));
+                aspect-ratio: 0.58 / 1;
+                max-height: calc(100dvh - 130px);
                 flex-shrink: 0;
-                perspective: 1800px;
-                perspective-origin: 40% 50%;
+                perspective: none;
             }
 
             .book {
@@ -1859,7 +1857,12 @@
             .leaf {
                 left: 0;
                 width: 100%;
-                height: 100%
+                height: 100%;
+                transform-origin: center center;
+            }
+
+            .face::after {
+                display: none;
             }
 
             .face,
@@ -1882,17 +1885,38 @@
             }
 
             .pg {
-                font-size: clamp(12px, 3.6cqw, 15px);
-                padding: 5% 6% 6%;
-                line-height: 1.58
+                font-size: clamp(11px, 3.05cqw, 14px);
+                padding: 4% 5% 7%;
+                line-height: 1.5;
+            }
+
+            .pg::-webkit-scrollbar {
+                width: 4px
+            }
+
+            .pg::-webkit-scrollbar-thumb {
+                background: #8fc9ec;
+                border-radius: 4px
+            }
+
+            .add-btn {
+                position: sticky;
+                bottom: 0;
+                z-index: 20;
+                box-shadow: 0 -6px 12px rgba(255, 255, 255, .95), 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
+            }
+
+            .pg.fixed .add-btn {
+                position: static;
+                box-shadow: 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
             }
 
             .cover {
-                font-size: clamp(12px, 3.6cqw, 15px)
+                font-size: clamp(11px, 3.05cqw, 14px)
             }
 
             .end-page {
-                font-size: clamp(12px, 3.6cqw, 15px)
+                font-size: clamp(11px, 3.05cqw, 14px)
             }
 
             .btn {
@@ -1908,25 +1932,25 @@
 
             .cover-inner {
                 max-width: 94%;
-                padding: 6% 5.5%
+                padding: 5% 5%
             }
 
             .pig-wrap {
-                width: 4.6em;
-                height: 4.6em
+                width: 4.4em;
+                height: 4.4em
             }
 
             .cover h1 {
-                font-size: 1.5em
+                font-size: 1.45em
             }
 
             .cover .fields {
-                gap: 1.1em;
+                gap: 1em;
                 font-size: .7em
             }
 
             .cover .field-input {
-                width: 5em
+                width: 4.8em
             }
 
             .rec-bottom {
@@ -1938,15 +1962,15 @@
             }
 
             .end-title {
-                font-size: 1.55em
+                font-size: 1.5em
             }
 
             .end-line {
-                font-size: .9em
+                font-size: .88em
             }
 
             .end-thanks {
-                font-size: .92em
+                font-size: .9em
             }
 
             .hint {
@@ -1977,7 +2001,7 @@
 
         @media (max-width:420px) {
             .hd h2 {
-                font-size: 1.28em
+                font-size: 1.26em
             }
 
             .coupon {
@@ -1998,7 +2022,7 @@
             }
 
             .pg {
-                font-size: 12px
+                font-size: 11px
             }
 
             .redeem-ready .txt {
@@ -2032,7 +2056,6 @@
 
             <div class="backdrop left" aria-hidden="true"></div>
 
-            <!-- ====== 封底（右侧底层） ====== -->
             <div class="backdrop right">
                 <div class="end-page">
                     <h2 class="end-title">存折封底</h2>
@@ -2050,7 +2073,7 @@
                 </div>
             </div>
 
-            <!-- ====== 第 0 张纸：封面 + 目录 ====== -->
+            <!-- 第 0 张纸：封面 + 目录 -->
             <div class="leaf">
                 <div class="face front">
                     <div class="cover">
@@ -2124,7 +2147,7 @@
                 </div>
             </div>
 
-            <!-- ====== 第 1 张纸：怎么玩 + 怎么写 ====== -->
+            <!-- 第 1 张纸：怎么玩 + 怎么写 -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2288,7 +2311,7 @@
                 </div>
             </div>
 
-            <!-- ====== 第 2 张纸：家庭公约 + 奖励券① ====== -->
+            <!-- 第 2 张纸：家庭公约 + 奖励券① -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2342,7 +2365,7 @@
                 </div>
             </div>
 
-            <!-- ====== 第 3 张纸：奖励券② + 奖励券③ ====== -->
+            <!-- 第 3 张纸：奖励券② + 奖励券③ -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg">
@@ -2364,7 +2387,7 @@
                 </div>
             </div>
 
-            <!-- ====== 第 4 张纸：成长记录 + 兑换历史 ====== -->
+            <!-- 第 4 张纸：成长记录 + 兑换历史 -->
             <div class="leaf">
                 <div class="face front">
                     <div class="pg fixed" style="padding-bottom:4%">
@@ -2477,7 +2500,6 @@
         </div>
     </div>
 
-    <!-- 撒花层 -->
     <div id="confettiLayer" aria-hidden="true"></div>
     <div class="celebrate-toast" id="celebrateToast">
         <div class="ct-emoji" id="ctEmoji">🏆</div>
