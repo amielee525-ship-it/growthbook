@@ -441,6 +441,58 @@
             color: var(--ink)
         }
 
+        /* 家庭公约签名区：每项一行 */
+        .promise-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            margin-top: 1em;
+        }
+
+        .promise-item {
+            display: flex;
+            align-items: baseline;
+            gap: .8em;
+            font-size: 1em;
+        }
+
+        .promise-item span {
+            flex: 0 0 5.2em;
+            font-size: .9em;
+            color: var(--blue-deep);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .promise-item input {
+            flex: 1;
+            min-width: 0;
+            font-family: inherit;
+            font-size: 1em;
+            color: var(--blue-deep);
+            background: transparent;
+            border: none;
+            border-bottom: 2px dotted #a8cee4;
+            padding: .2em .3em .35em;
+            outline: none;
+            transition: border-color .18s, background .18s;
+            border-radius: 0;
+        }
+
+        .promise-item input:focus {
+            border-bottom-color: var(--blue);
+            background: rgba(255, 255, 255, .65);
+        }
+
+        .promise-item input::placeholder {
+            color: #c3d9e8;
+            font-size: .9em;
+        }
+
+        .promise-item input[type="date"] {
+            color: var(--blue-deep);
+        }
+
         .coupon {
             display: flex;
             align-items: center;
@@ -1366,71 +1418,14 @@
         }
 
         .cover .field-input::placeholder {
-
-            /* 封面日期输入框：显示完整 */
-            .cover .field-input[type="date"] {
-                width: 8em;
-                font-size: .95em;
-                color: var(--blue-deep);
-                text-align: center;
-            }
-
-            /* 手机端封面日期适当缩窄 */
-            @media (max-width:760px) {
-                .cover .field-input[type="date"] {
-                    width: 7em;
-                    font-size: .9em;
-                }
-            }
-
-            /* 家庭公约签名区 */
-            .promise-fields {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: .75em 1.2em;
-                margin-top: .85em;
-            }
-
-            .promise-item {
-                display: flex;
-                flex-direction: column;
-                gap: .28em;
-                font-size: 1em;
-                color: var(--ink-soft);
-                min-width: 0;
-            }
-
-            .promise-item span {
-                font-size: .85em;
-                white-space: nowrap;
-            }
-
-            .promise-item input {
-                font-family: inherit;
-                font-size: .95em;
-                color: var(--blue-deep);
-                background: transparent;
-                border: none;
-                border-bottom: 2px dotted #a8cee4;
-                padding: .2em .15em .35em;
-                outline: none;
-                width: 100%;
-                transition: border-color .18s, background .18s;
-                border-radius: 0;
-            }
-
-            .promise-item input:focus {
-                border-bottom-color: var(--blue);
-                background: rgba(255, 255, 255, .65);
-            }
-
-            .promise-item input::placeholder {
-                color: #c3d9e8;
-                font-size: .85em;
-            }
-
             color: #c3d9e8;
             font-size: .9em
+        }
+
+        .cover .field-input[type="date"] {
+            width: 8em;
+            font-size: .95em;
+            color: var(--blue-deep);
         }
 
         .end-page {
@@ -1918,19 +1913,17 @@
                 width: 100%
             }
 
-            /* 手机端：所有 leaf 叠在一起；★ 关键：leaf 不接收点击 */
             .leaf {
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                transform: none !important;
+                transform: none;
                 transition: none;
                 transform-style: flat;
                 z-index: 1;
                 pointer-events: none;
-                /* ★ 新增：让点击穿透到当前显示的 face */
             }
 
             .face {
@@ -1940,13 +1933,12 @@
                 visibility: hidden;
                 pointer-events: none;
                 transition: opacity .22s ease;
-                transform: none !important;
+                transform: none;
                 backface-visibility: visible;
                 -webkit-backface-visibility: visible;
                 border-radius: 14px;
             }
 
-            /* ★ 当前显示的这一面：恢复点击，能滚能填 */
             .face.phone-page {
                 opacity: 1;
                 visibility: visible;
@@ -1991,7 +1983,6 @@
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
                 pointer-events: auto;
-                /* ★ 保险：让内容区自身也能交互 */
             }
 
             .pg::-webkit-scrollbar {
@@ -2009,6 +2000,23 @@
 
             .pg.fixed {
                 overflow: hidden
+            }
+
+            input,
+            textarea,
+            select,
+            button {
+                pointer-events: auto;
+            }
+
+            textarea {
+                -webkit-user-select: text;
+                user-select: text;
+            }
+
+            input {
+                -webkit-user-select: text;
+                user-select: text;
             }
 
             .hd {
@@ -2053,24 +2061,6 @@
 
             .coupon .c-s {
                 font-size: .62em
-            }
-
-            /* 输入框和按钮：确保能点击、能聚焦 */
-            input,
-            textarea,
-            select,
-            button {
-                pointer-events: auto;
-            }
-
-            textarea {
-                -webkit-user-select: text;
-                user-select: text;
-            }
-
-            input {
-                -webkit-user-select: text;
-                user-select: text;
             }
 
             .add-btn {
@@ -2140,6 +2130,26 @@
 
             .cover .field-input {
                 width: 4.6em
+            }
+
+            .cover .field-input[type="date"] {
+                width: 7em;
+                font-size: .9em;
+            }
+
+            .promise-fields {
+                gap: .85em;
+                margin-top: .85em;
+            }
+
+            .promise-item span {
+                flex: 0 0 4.6em;
+                font-size: .88em;
+            }
+
+            .promise-item input {
+                font-size: .95em;
+                padding: .18em .25em .3em;
             }
 
             .end-page {
@@ -2779,7 +2789,7 @@
 
     <input type="file" id="pigFileInput" accept="image/*" hidden>
     <script>
-        /* ============ 一、翻书 ============ */
+        /* ============ 一、翻书（桌面端 3D 翻书 / 手机端单页切换） ============ */
         (function () {
             const book = document.getElementById('book');
             const leaves = Array.from(book.querySelectorAll('.leaf'));
@@ -2788,20 +2798,17 @@
             const counter = document.getElementById('counter');
             const backdropRight = document.querySelector('.backdrop.right');
 
-            const TOTAL_LEAVES = leaves.length;              // 5
-            const DESKTOP_TOTAL = TOTAL_LEAVES + 1;          // 6 个跨页状态
-            const PHONE_TOTAL = TOTAL_LEAVES * 2 + 1;        // 11 页（10 个面 + 1 封底）
+            const TOTAL_LEAVES = leaves.length;        // 5
+            const DESKTOP_TOTAL = TOTAL_LEAVES + 1;     // 6 个跨页状态
+            const PHONE_TOTAL = TOTAL_LEAVES * 2 + 1; // 11 页（10 个面 + 1 封底）
 
-            let flipped = 0;                                 // 桌面端：翻过去的 leaf 数
-            let phonePage = 0;                               // 手机端：当前页索引
+            let flipped = 0;   // 桌面端：已翻过的 leaf 数
+            let phonePage = 0; // 手机端：当前页索引
 
-            function isMobile() {
-                return window.innerWidth <= 760;
-            }
+            function isMobile() { return window.innerWidth <= 760; }
 
-            /* ---------- 桌面端翻书 ---------- */
+            /* ---------- 桌面端：3D 翻书 ---------- */
             function renderDesktop(animate) {
-                // 清理手机端的 .phone-page 状态
                 document.querySelectorAll('.face.phone-page').forEach(el => el.classList.remove('phone-page'));
                 if (backdropRight) backdropRight.classList.remove('phone-page');
 
@@ -2824,7 +2831,6 @@
 
             /* ---------- 手机端：切换显示某一页 ---------- */
             function renderMobile() {
-                // 全部隐藏
                 document.querySelectorAll('.face.phone-page').forEach(el => el.classList.remove('phone-page'));
                 if (backdropRight) backdropRight.classList.remove('phone-page');
 
@@ -2846,13 +2852,9 @@
                 counter.textContent = (phonePage + 1) + ' / ' + PHONE_TOTAL;
             }
 
-            /* ---------- 统一渲染入口 ---------- */
             function render(animate) {
-                if (isMobile()) {
-                    renderMobile();
-                } else {
-                    renderDesktop(animate);
-                }
+                if (isMobile()) renderMobile();
+                else renderDesktop(animate);
             }
 
             function next() {
@@ -2895,13 +2897,10 @@
                 touchX = touchY = null;
             }, { passive: true });
 
-            // 屏幕尺寸变化时，尽量保持用户当前看的位置
             window.addEventListener('resize', () => {
                 if (isMobile()) {
-                    // 桌面 → 手机：flipped 对应到 phonePage
                     phonePage = Math.min(flipped * 2, PHONE_TOTAL - 1);
                 } else {
-                    // 手机 → 桌面：phonePage 对应到 flipped
                     flipped = Math.min(Math.floor(phonePage / 2), TOTAL_LEAVES);
                 }
                 render(false);
@@ -2909,6 +2908,8 @@
 
             render(false);
         })();
+
+        /* ============ 二、封面小猪贴纸 ============ */
         (function () {
             const KEY = 'passbook-pig-v1';
             const wrap = document.getElementById('pigWrap');
@@ -3100,7 +3101,8 @@
 
             renderList('c1'); renderList('c2'); renderList('c3');
         })();
-
+    </script>
+    <script>
         /* ============ 五、成长存款记录 ============ */
         const RECORD_KEY = 'passbook-records-v1';
         const REDEEM_KEY = 'passbook-redeems-v1';
