@@ -1829,7 +1829,7 @@
             body {
                 height: 100%;
                 height: 100dvh;
-                overflow: hidden;
+                overflow: hidden
             }
 
             body {
@@ -1841,14 +1841,12 @@
                 overflow: hidden;
             }
 
-            /* 书页：占满可用空间，绕左边缘翻页 */
             .stage {
                 width: min(94vw, calc((100dvh - 120px) * 0.62));
                 aspect-ratio: 0.62 / 1;
                 max-height: calc(100dvh - 120px);
                 flex-shrink: 0;
-                perspective: 1800px;
-                perspective-origin: 0% 50%;
+                perspective: none;
                 margin: 0 auto;
             }
 
@@ -1857,25 +1855,45 @@
                 width: 100%
             }
 
+            /* 手机端：所有 leaf 叠在一起，不用 3D 翻书 */
             .leaf {
+                position: absolute;
+                top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                transform-origin: left center;
+                transform: none !important;
+                transition: none;
+                transform-style: flat;
+                z-index: 1;
             }
 
+            /* 所有面默认隐藏，只有 .phone-page 显示 */
             .face {
-                border-radius: 14px
+                position: absolute;
+                inset: 0;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .22s ease;
+                transform: none !important;
+                backface-visibility: visible;
+                -webkit-backface-visibility: visible;
+                border-radius: 14px;
             }
 
-            .face.back {
-                border-radius: 14px
+            .face.phone-page {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                z-index: 100;
             }
 
             .face::after {
                 display: none
             }
 
+            /* 封底也是"一页" */
             .backdrop.left {
                 display: none
             }
@@ -1883,14 +1901,25 @@
             .backdrop.right {
                 left: 0;
                 width: 100%;
-                border-radius: 14px
+                border-radius: 14px;
+                z-index: 1;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .22s ease;
+            }
+
+            .backdrop.right.phone-page {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                z-index: 100;
             }
 
             .spine {
                 display: none
             }
 
-            /* 内容区：可滚动 + 明显滚动条 + 底部留白 */
             .pg {
                 font-size: clamp(11px, 3.2cqw, 14px);
                 padding: 5% 5.5% 12%;
@@ -1909,14 +1938,13 @@
 
             .pg::-webkit-scrollbar-thumb {
                 background: rgba(74, 168, 224, .55);
-                border-radius: 5px;
+                border-radius: 5px
             }
 
             .pg.fixed {
                 overflow: hidden
             }
 
-            /* 所有页面：紧凑排版 */
             .hd {
                 margin-bottom: .6em
             }
@@ -1943,7 +1971,6 @@
                 padding: .4em .45em
             }
 
-            /* 奖励券：紧凑一点 */
             .coupon {
                 padding: .45em .6em;
                 margin-bottom: .45em
@@ -1962,7 +1989,6 @@
                 font-size: .62em
             }
 
-            /* 新增按钮：吸在底部，永远能点到 */
             .add-btn {
                 position: sticky;
                 bottom: 0;
@@ -1976,11 +2002,10 @@
                 box-shadow: 0 -8px 16px rgba(255, 255, 255, .98), 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
             }
 
-            /* 成长记录页的底部分页区 */
             .rec-bottom {
                 gap: .4em;
                 margin-top: .5em;
-                flex-shrink: 0;
+                flex-shrink: 0
             }
 
             .rec-bottom .progress-bar {
@@ -1992,7 +2017,6 @@
                 font-size: .72em
             }
 
-            /* 封面 */
             .cover {
                 font-size: clamp(11px, 3.2cqw, 14px)
             }
@@ -2034,7 +2058,6 @@
                 width: 4.6em
             }
 
-            /* 封底 */
             .end-page {
                 font-size: clamp(11px, 3.2cqw, 14px);
                 padding: 8% 8%
@@ -2075,7 +2098,6 @@
                 font-size: .62em
             }
 
-            /* 底部控制条 */
             .controls {
                 position: sticky;
                 bottom: 0;
@@ -2102,7 +2124,6 @@
                 display: none
             }
 
-            /* 弹窗 */
             .modal-box {
                 width: 94vw;
                 padding: 1.2em 1.1em 1em;
@@ -2117,7 +2138,6 @@
                 font-size: .62em
             }
 
-            /* 撒花提示 */
             .celebrate-toast .ct-emoji {
                 font-size: 3.2em
             }
@@ -2130,7 +2150,6 @@
                 font-size: .75em
             }
 
-            /* 兑换历史卡片 */
             .hc-record {
                 font-size: .66em
             }
@@ -2675,10 +2694,25 @@
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const counter = document.getElementById('counter');
-            const TOTAL = leaves.length;
-            let flipped = 0;
+            const backdropRight = document.querySelector('.backdrop.right');
 
-            function render(animate) {
+            const TOTAL_LEAVES = leaves.length;              // 5
+            const DESKTOP_TOTAL = TOTAL_LEAVES + 1;          // 6 个跨页状态
+            const PHONE_TOTAL = TOTAL_LEAVES * 2 + 1;        // 11 页（10 个面 + 1 封底）
+
+            let flipped = 0;                                 // 桌面端：翻过去的 leaf 数
+            let phonePage = 0;                               // 手机端：当前页索引
+
+            function isMobile() {
+                return window.innerWidth <= 760;
+            }
+
+            /* ---------- 桌面端翻书 ---------- */
+            function renderDesktop(animate) {
+                // 清理手机端的 .phone-page 状态
+                document.querySelectorAll('.face.phone-page').forEach(el => el.classList.remove('phone-page'));
+                if (backdropRight) backdropRight.classList.remove('phone-page');
+
                 leaves.forEach((leaf, i) => {
                     const isFlipped = i < flipped;
                     if (!animate) leaf.style.transition = 'none';
@@ -2687,16 +2721,62 @@
                     if (!animate) { void leaf.offsetWidth; leaf.style.transition = ''; }
                 });
                 prevBtn.disabled = (flipped === 0);
-                nextBtn.disabled = (flipped >= TOTAL);
-                counter.textContent = (flipped + 1) + ' / ' + (TOTAL + 1);
+                nextBtn.disabled = (flipped >= TOTAL_LEAVES);
+                counter.textContent = (flipped + 1) + ' / ' + DESKTOP_TOTAL;
                 const movingLeaf = leaves[flipped - 1];
                 if (movingLeaf && animate) {
                     movingLeaf.classList.add('flipping');
                     setTimeout(() => movingLeaf.classList.remove('flipping'), 950);
                 }
             }
-            function next() { if (flipped < TOTAL) { flipped++; render(true); } }
-            function prev() { if (flipped > 0) { flipped--; render(true); } }
+
+            /* ---------- 手机端：切换显示某一页 ---------- */
+            function renderMobile() {
+                // 全部隐藏
+                document.querySelectorAll('.face.phone-page').forEach(el => el.classList.remove('phone-page'));
+                if (backdropRight) backdropRight.classList.remove('phone-page');
+
+                if (phonePage >= TOTAL_LEAVES * 2) {
+                    // 最后一页：封底
+                    if (backdropRight) backdropRight.classList.add('phone-page');
+                } else {
+                    const leafIdx = Math.floor(phonePage / 2);
+                    const isBack = (phonePage % 2 === 1);
+                    const leaf = leaves[leafIdx];
+                    if (leaf) {
+                        const face = leaf.querySelector(isBack ? '.face.back' : '.face.front');
+                        if (face) face.classList.add('phone-page');
+                    }
+                }
+
+                prevBtn.disabled = (phonePage === 0);
+                nextBtn.disabled = (phonePage >= PHONE_TOTAL - 1);
+                counter.textContent = (phonePage + 1) + ' / ' + PHONE_TOTAL;
+            }
+
+            /* ---------- 统一渲染入口 ---------- */
+            function render(animate) {
+                if (isMobile()) {
+                    renderMobile();
+                } else {
+                    renderDesktop(animate);
+                }
+            }
+
+            function next() {
+                if (isMobile()) {
+                    if (phonePage < PHONE_TOTAL - 1) { phonePage++; render(); }
+                } else {
+                    if (flipped < TOTAL_LEAVES) { flipped++; render(true); }
+                }
+            }
+            function prev() {
+                if (isMobile()) {
+                    if (phonePage > 0) { phonePage--; render(); }
+                } else {
+                    if (flipped > 0) { flipped--; render(true); }
+                }
+            }
 
             nextBtn.addEventListener('click', next);
             prevBtn.addEventListener('click', prev);
@@ -2723,10 +2803,20 @@
                 touchX = touchY = null;
             }, { passive: true });
 
+            // 屏幕尺寸变化时，尽量保持用户当前看的位置
+            window.addEventListener('resize', () => {
+                if (isMobile()) {
+                    // 桌面 → 手机：flipped 对应到 phonePage
+                    phonePage = Math.min(flipped * 2, PHONE_TOTAL - 1);
+                } else {
+                    // 手机 → 桌面：phonePage 对应到 flipped
+                    flipped = Math.min(Math.floor(phonePage / 2), TOTAL_LEAVES);
+                }
+                render(false);
+            });
+
             render(false);
         })();
-
-        /* ============ 二、封面小猪贴纸 ============ */
         (function () {
             const KEY = 'passbook-pig-v1';
             const wrap = document.getElementById('pigWrap');
