@@ -1855,7 +1855,7 @@
                 width: 100%
             }
 
-            /* 手机端：所有 leaf 叠在一起，不用 3D 翻书 */
+            /* 手机端：所有 leaf 叠在一起；★ 关键：leaf 不接收点击 */
             .leaf {
                 position: absolute;
                 top: 0;
@@ -1866,9 +1866,10 @@
                 transition: none;
                 transform-style: flat;
                 z-index: 1;
+                pointer-events: none;
+                /* ★ 新增：让点击穿透到当前显示的 face */
             }
 
-            /* 所有面默认隐藏，只有 .phone-page 显示 */
             .face {
                 position: absolute;
                 inset: 0;
@@ -1882,6 +1883,7 @@
                 border-radius: 14px;
             }
 
+            /* ★ 当前显示的这一面：恢复点击，能滚能填 */
             .face.phone-page {
                 opacity: 1;
                 visibility: visible;
@@ -1893,7 +1895,6 @@
                 display: none
             }
 
-            /* 封底也是"一页" */
             .backdrop.left {
                 display: none
             }
@@ -1926,6 +1927,8 @@
                 line-height: 1.55;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
+                pointer-events: auto;
+                /* ★ 保险：让内容区自身也能交互 */
             }
 
             .pg::-webkit-scrollbar {
@@ -1987,6 +1990,24 @@
 
             .coupon .c-s {
                 font-size: .62em
+            }
+
+            /* 输入框和按钮：确保能点击、能聚焦 */
+            input,
+            textarea,
+            select,
+            button {
+                pointer-events: auto;
+            }
+
+            textarea {
+                -webkit-user-select: text;
+                user-select: text;
+            }
+
+            input {
+                -webkit-user-select: text;
+                user-select: text;
             }
 
             .add-btn {
