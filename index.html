@@ -1841,12 +1841,14 @@
                 overflow: hidden;
             }
 
+            /* 关键1：恢复 3D 透视，透视点在左侧（书的中缝位置） */
             .stage {
                 width: min(94vw, calc((100dvh - 130px) * 0.58));
                 aspect-ratio: 0.58 / 1;
                 max-height: calc(100dvh - 130px);
                 flex-shrink: 0;
-                perspective: none;
+                perspective: 1800px;
+                perspective-origin: 0% 50%;
             }
 
             .book {
@@ -1854,13 +1856,15 @@
                 width: 100%
             }
 
+            /* 关键2：绕左边缘旋转，翻过去的页会真正翻走 */
             .leaf {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                transform-origin: center center;
+                transform-origin: left center;
             }
 
+            /* 关键3：隐藏书脊阴影，防止遮住左侧内容 */
             .face::after {
                 display: none;
             }
@@ -1899,6 +1903,7 @@
                 border-radius: 4px
             }
 
+            /* 关键4：新增按钮吸底，永远能点到 */
             .add-btn {
                 position: sticky;
                 bottom: 0;
@@ -1908,7 +1913,6 @@
 
             .pg.fixed .add-btn {
                 position: static;
-                box-shadow: 0 3px 0 #1e5f92, 0 6px 14px rgba(43, 123, 185, .28);
             }
 
             .cover {
